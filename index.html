@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <!-- viewport-fit=cover turns on safe-area insets. Never add user-scalable=no or maximum-scale. -->
     <meta
       name="viewport"
@@ -13,6 +14,13 @@
     <meta name="color-scheme" content="light" />
     <meta name="description" content="Find and book flights with TravelOps." />
     <title>TravelOps</title>
+    <!-- The card shown when the link is shared. Chat apps need an absolute image URL. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="TravelOps" />
+    <meta property="og:description" content="Find and book flights with TravelOps." />
+    <meta property="og:image" content="https://travel-ops-demo.vercel.app/og-image.png" />
+    <meta property="og:image:alt" content="TravelOps: find and book flights." />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <div id="root"></div>
