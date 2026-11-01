@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { RouterProvider } from "@tanstack/react-router"
 import { Toaster } from "@/shared/ui/toast"
 import { TooltipProvider } from "@/shared/ui/tooltip"
@@ -5,11 +6,16 @@ import { createAppRouter } from "./routes"
 
 const router = createAppRouter()
 
+// Server data (loading, errors, caching). Stories make their own client in .storybook/preview.tsx.
+const queryClient = new QueryClient()
+
 export function App() {
   return (
-    <TooltipProvider>
-      <RouterProvider router={router} />
-      <Toaster />
-    </TooltipProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <RouterProvider router={router} />
+        <Toaster />
+      </TooltipProvider>
+    </QueryClientProvider>
   )
 }
