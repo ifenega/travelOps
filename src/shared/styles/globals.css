@@ -78,32 +78,37 @@
 
 /*
  * Reduced motion: keep the fade, drop the movement.
- * Unlayered on purpose, so it overrides the keyframes defined in tokens.css.
+ * Every animate-* class reads its --animate-* variable, so pointing the variables at fades swaps
+ * every animation at once. (Overriding the keyframes themselves doesn't work: Tailwind writes the
+ * theme's keyframes later in the CSS, and the last keyframes with a name always win.)
  */
 @media (prefers-reduced-motion: reduce) {
-  @keyframes pop-in {
-    from {
-      opacity: 0;
-    }
+  :root {
+    --animate-pop-in: reduced-fade-in 125ms ease-out;
+    --animate-popover-in: reduced-fade-in 200ms ease-out;
+    --animate-collapsible-open: reduced-fade-in 200ms ease-out;
+    --animate-collapsible-close: reduced-fade-out 200ms ease-out;
+    --animate-sheet-in: reduced-fade-in 300ms ease-out;
+    --animate-sheet-out: reduced-fade-out 200ms ease-out;
+    --animate-sparkle-large: reduced-pulse 1.8s ease-in-out infinite alternate;
+    --animate-sparkle-small: reduced-pulse 1.8s ease-in-out -0.9s infinite alternate;
   }
-  @keyframes collapsible-open {
-    from {
-      opacity: 0;
-    }
+}
+
+@keyframes reduced-fade-in {
+  from {
+    opacity: 0;
   }
-  @keyframes collapsible-close {
-    to {
-      opacity: 0;
-    }
+}
+
+@keyframes reduced-fade-out {
+  to {
+    opacity: 0;
   }
-  @keyframes sheet-in {
-    from {
-      opacity: 0;
-    }
-  }
-  @keyframes sheet-out {
-    to {
-      opacity: 0;
-    }
+}
+
+@keyframes reduced-pulse {
+  from {
+    opacity: 0.6;
   }
 }

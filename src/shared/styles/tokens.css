@@ -149,6 +149,28 @@
     }
   }
 
+  /* The assistant's sparkle while it's thinking: the two stars drift and breathe, out of step.
+     Only shown while waiting for a reply, so the loop never sits on screen for long. */
+  --animate-sparkle-large: sparkle-large 1.8s ease-in-out infinite alternate;
+  --animate-sparkle-small: sparkle-small 1.8s ease-in-out -0.9s infinite alternate;
+
+  @keyframes sparkle-large {
+    from {
+      transform: scale(0.9) rotate(-8deg);
+    }
+    to {
+      transform: scale(1.05) rotate(8deg);
+    }
+  }
+  @keyframes sparkle-small {
+    from {
+      transform: translate(-0.75px, 0.75px) scale(0.75);
+    }
+    to {
+      transform: translate(0.75px, -0.75px) scale(1.1);
+    }
+  }
+
   /* Mobile sidebar: slides in from the left with the iOS curve, leaves a little faster. */
   --animate-sheet-in: sheet-in 300ms var(--ease-drawer);
   --animate-sheet-out: sheet-out 200ms var(--ease-out);

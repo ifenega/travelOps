@@ -17,6 +17,13 @@ type ComboboxProps<T> = {
   placeholder?: string
   /** Shown (and announced) when there's text but nothing matches. */
   emptyMessage?: string
+  /** While results load, don't claim there are no matches. */
+  isLoading?: boolean
+  /** The input's id, e.g. to move focus to it after a validation error. */
+  id?: string
+  invalid?: boolean
+  /** id of the element describing the input, e.g. an error message. */
+  describedBy?: string
   className?: string
   labelClassName?: string
   inputClassName?: string
@@ -35,6 +42,10 @@ export function Combobox<T>({
   onInputValueChange,
   placeholder,
   emptyMessage = "No matches",
+  isLoading = false,
+  id,
+  invalid,
+  describedBy,
   className,
   labelClassName,
   inputClassName,
@@ -49,6 +60,7 @@ export function Combobox<T>({
     getItemProps,
   } = useCombobox({
     items,
+    inputId: id,
     itemToString,
     itemToKey: (item) => (item ? itemToKey(item) : ""),
     selectedItem,
@@ -58,7 +70,7 @@ export function Combobox<T>({
 
   const labelProps = getLabelProps()
   const showList = isOpen && items.length > 0
-  const showEmpty = isOpen && items.length === 0 && inputValue.trim() !== ""
+  const showEmpty = isOpen && !isLoading && items.length === 0 && inputValue.trim() !== ""
   const status = !isOpen
     ? ""
     : items.length > 0
@@ -77,7 +89,11 @@ export function Combobox<T>({
         {label}
       </label>
       <input
-        {...getInputProps({ placeholder })}
+        {...getInputProps({
+          placeholder,
+          "aria-invalid": invalid || undefined,
+          "aria-describedby": describedBy,
+        })}
         autoComplete="off"
         autoCorrect="off"
         spellCheck={false}
