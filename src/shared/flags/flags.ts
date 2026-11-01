@@ -19,6 +19,8 @@ export const flags = {
   /** Theme toggle in the sidebar. Team-only for now. */
   darkMode: flag(env.VITE_FLAG_DARK_MODE, false),
   bookings: flag(env.VITE_FLAG_BOOKINGS, true),
+  /** Booking flights from the chat's results (passengers, extras, itinerary, payment). */
+  checkout: flag(env.VITE_FLAG_CHECKOUT, true),
   expenses: flag(env.VITE_FLAG_EXPENSES, true),
   wallet: flag(env.VITE_FLAG_WALLET, true),
   policies: flag(env.VITE_FLAG_POLICIES, true),

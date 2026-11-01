@@ -20,17 +20,18 @@ Vite + React 19 + TypeScript (strict) · Tailwind v4 · shadcn/ui (Radix) · Rea
 
 ## Commands
 
-| Command                | What it does                                                 |
-| ---------------------- | ------------------------------------------------------------ |
-| `pnpm dev`             | Dev server                                                   |
-| `pnpm dev:phone`       | Dev server on the LAN, for testing on a real phone           |
-| `pnpm build`           | Type-check + production build                                |
-| `pnpm typecheck`       | Type-check only                                              |
-| `pnpm lint`            | Biome lint + format check                                    |
-| `pnpm format`          | Biome auto-fix + format                                      |
-| `pnpm test`            | Every story as a test (renders + a11y), in headless Chromium |
-| `pnpm storybook`       | Component viewer at localhost:6006                           |
-| `pnpm storybook:phone` | Component viewer on the LAN, for a real phone                |
+| Command                | What it does                                                  |
+| ---------------------- | ------------------------------------------------------------- |
+| `pnpm dev`             | Dev server                                                    |
+| `pnpm dev:phone`       | Dev server on the LAN, for testing on a real phone            |
+| `pnpm build`           | Type-check + production build                                 |
+| `pnpm typecheck`       | Type-check only                                               |
+| `pnpm lint`            | Biome lint + format check                                     |
+| `pnpm format`          | Biome auto-fix + format                                       |
+| `pnpm test`            | Every story as a test (renders + a11y), in headless Chromium  |
+| `pnpm test:e2e`        | Playwright journeys in `e2e/` (desktop + phone), on the mocks |
+| `pnpm storybook`       | Component viewer at localhost:6006                            |
+| `pnpm storybook:phone` | Component viewer on the LAN, for a real phone                 |
 
 ## Folder structure
 
@@ -125,7 +126,7 @@ Follow `.claude/skills/emil-design-eng` and `animate`.
 - **Every component has stories.** Stories run as smoke tests plus a11y checks via Vitest.
 - **Interaction tests:** only for components with real behaviour, such as the prompt input or a dialog closing on Esc.
 - **Unit tests:** only for real logic in `lib/` or `features/*/utils`.
-- **Playwright end-to-end tests:** start when real API flows exist (phase 2).
+- **Playwright end-to-end tests:** only for the main journeys (`e2e/`). Today that's booking a flight from the chat.
 
 ## Git (several Claude sessions work in parallel)
 

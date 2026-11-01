@@ -113,7 +113,7 @@ export const EditOpensChat: Story = {
     const body = within(canvasElement.ownerDocument.body)
     await userEvent.click(await canvas.findByRole("button", { name: "Manage United States trip" }))
     await userEvent.click(await body.findByRole("menuitem", { name: "Edit booking" }))
-    await canvas.findByRole("heading", { level: 1, name: "New chat" })
+    await canvas.findByRole("heading", { level: 1, name: "How can I help you travel today?" })
   },
 }
 

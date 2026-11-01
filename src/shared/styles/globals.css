@@ -21,6 +21,31 @@
     color-scheme: dark;
   }
 
+  /*
+   * Subtle scrollbars everywhere: thin and faint, in light and dark. (Systems set to always show
+   * scrollbars otherwise get thick grey bars, e.g. in the sidebar.) The ::-webkit rules cover
+   * browsers that don't support the standard properties yet.
+   */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--foreground) 20%, transparent) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 9999px;
+    background: color-mix(in oklab, var(--foreground) 20%, transparent) content-box;
+  }
+
   /* Headings and <main> get focus after navigation (for screen readers); no ring needed there. */
   [tabindex="-1"]:focus {
     outline: none;
@@ -91,6 +116,10 @@
     --animate-collapsible-close: reduced-fade-out 200ms ease-out;
     --animate-sheet-in: reduced-fade-in 300ms ease-out;
     --animate-sheet-out: reduced-fade-out 200ms ease-out;
+    --animate-sheet-right-in: reduced-fade-in 300ms ease-out;
+    --animate-sheet-right-out: reduced-fade-out 200ms ease-out;
+    /* Loading spinners still show activity, without turning. */
+    --animate-spin: reduced-pulse 1s ease-in-out infinite alternate;
     --animate-sparkle-large: reduced-pulse 1.8s ease-in-out infinite alternate;
     --animate-sparkle-small: reduced-pulse 1.8s ease-in-out -0.9s infinite alternate;
   }

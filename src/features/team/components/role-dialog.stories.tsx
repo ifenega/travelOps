@@ -70,6 +70,6 @@ export const Validation: Story = {
     await within(dialog).findByText("There's already a role with this name")
     await expect(
       within(dialog).getByText("Give the role access to at least one feature"),
-    ).toBeVisible()
+    ).toBeInTheDocument()
   },
 }

@@ -1,4 +1,4 @@
-import { Outlet, useRouter } from "@tanstack/react-router"
+import { Outlet, useRouter, useRouterState } from "@tanstack/react-router"
 import { useEffect } from "react"
 import { focusPageHeading } from "@/shared/lib/focus"
 import { Sidebar, SidebarProvider } from "@/shared/ui/sidebar"
@@ -18,6 +18,12 @@ export function DashboardLayout() {
       }),
     [router],
   )
+
+  // Checkout and other full pages bring their own layout (routes.tsx marks them).
+  const fullPage = useRouterState({
+    select: (state) => state.matches.some((match) => match.staticData.fullPage),
+  })
+  if (fullPage) return <Outlet />
 
   return (
     <SidebarProvider>

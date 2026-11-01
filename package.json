@@ -12,6 +12,7 @@
     "lint": "biome check .",
     "format": "biome check --write .",
     "test": "vitest run --passWithNoTests",
+    "test:e2e": "playwright test",
     "storybook": "storybook dev -p 6006",
     "storybook:phone": "storybook dev -p 6006 --host 0.0.0.0",
     "build-storybook": "storybook build"
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.4",
+    "@playwright/test": "1.64.1",
     "@storybook/addon-a11y": "^10.6.5",
     "@storybook/addon-docs": "^10.6.5",
     "@storybook/addon-themes": "^10.6.5",

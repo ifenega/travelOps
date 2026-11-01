@@ -12,6 +12,9 @@ export const placeSchema = z.object({
   /** "Lagos, Nigeria" — the second line in the autocomplete list. */
   region: z.string(),
   kind: z.enum(["airport", "city", "station"]),
+  /** Where it is, for the map. */
+  lng: z.number(),
+  lat: z.number(),
 })
 
 export type Place = z.infer<typeof placeSchema>
