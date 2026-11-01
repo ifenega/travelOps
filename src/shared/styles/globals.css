@@ -86,6 +86,7 @@
   :root {
     --animate-pop-in: reduced-fade-in 125ms ease-out;
     --animate-popover-in: reduced-fade-in 200ms ease-out;
+    --animate-dialog-in: reduced-fade-in 250ms ease-out;
     --animate-collapsible-open: reduced-fade-in 200ms ease-out;
     --animate-collapsible-close: reduced-fade-out 200ms ease-out;
     --animate-sheet-in: reduced-fade-in 300ms ease-out;
