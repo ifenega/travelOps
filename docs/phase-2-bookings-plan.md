@@ -12,21 +12,21 @@ Read `CLAUDE.md` first. Its rules (simplicity, accessibility, tokens, animation)
 
 ## 1. What the designs show
 
-| #   | Screen / state | Screenshots |
-| --- | --- | --- |
-| 1   | **Bookings list, "My bookings" tab**: title, subtitle, tabs **My bookings 3 · Team bookings 3**, Search, an **All status** dropdown, and a grid of trip cards | 05.18.36, 05.19.13 |
-| 2   | **Trip card**: destination photo, a `···` button over the photo, a title ("Flight to United States"), a status badge (**Draft** grey, **Pending** amber, **Booked** green), "Jul 8 - Aug 18 · £1,466.58", then ✈ 3 and 👥 12 | 05.18.36 |
-| 3   | **Card `···` menu, "Manage booking"**: Edit booking ("Makes changes to your booking"), Share trip ("Share this trip with people"), Delete booking in red ("Remove booking from your list") | 05.18.36, 05.19.13 |
-| 4   | **"Team bookings" tab**: the same grid | 05.18.43 |
-| 5   | **"Upcoming / Past" tabs**: a search icon only, no status filter. The past cards are all **Paid**. | 05.19.59 |
-| 6   | **Share trip dialog**: "Share this trip with people, team members etc." with two switches. **Get a link**: "Share trip dates and services, but hide traveller names and prices". **Send via email**: "Share the full trip details and travellers. We won't send any prices, confirmation numbers, or tickets." | 05.19.22 |
-| 7   | **Get a link, on**: a trip picker ("Flight to United States · Roundtrip LOS - IST"), and a read-only link with a **Copy** button | 05.19.32 |
-| 8   | **Send via email, on**: a "Select email" dropdown of team members (avatar or initials, name, email) | 05.19.40, 05.19.48 |
-| 9   | **Trip page, Itinerary tab**: "Back to bookings", photo, **"United States trip"**, "Thu, May 1 - Thu, May 8", "Pittsburgh, PA", a `···` menu, tabs **Itinerary · Flights · Trains**, then a **map panel** on the right. Below the tabs is a timeline: a day heading in a tall condensed font ("THU, MAY 1"), stop dots ("Lagos, LOS"; "Doha, DOH · Layover in Doha: ~2h 35m"), and booking cards between the dots. | 05.20.13 |
-| 10  | **Trip `···` menu, "Manage booking"**: Edit trip, Print itinerary, Add to calendar, Delete trip (red) | 05.20.13 |
-| 11  | **Booking card** (a flight or train leg): ✈/🚆 icon, "LOS - DOH", **Booked** badge, a `···` menu; a blue strip "Booked on Pegasus Airlines" with ✕; depart time, city and airport ("Lagos, NG (EWR)"), aircraft and duration, "Confirmation PE24FB", the airline logo; arrive time and place | 05.20.13 |
-| 12  | **Booking `···` menu**: Edit booking, Delete booking (red) | 05.20.20 |
-| 13  | **Flights tab / Trains tab**: the same timeline with only that kind of booking | 05.20.20, 05.20.26 |
+| #   | Screen / state                                                                                                                                                                                                                                                                                                                                                                                                     | Screenshots        |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| 1   | **Bookings list, "My bookings" tab**: title, subtitle, tabs **My bookings 3 · Team bookings 3**, Search, an **All status** dropdown, and a grid of trip cards                                                                                                                                                                                                                                                      | 05.18.36, 05.19.13 |
+| 2   | **Trip card**: destination photo, a `···` button over the photo, a title ("Flight to United States"), a status badge (**Draft** grey, **Pending** amber, **Booked** green), "Jul 8 - Aug 18 · £1,466.58", then ✈ 3 and 👥 12                                                                                                                                                                                       | 05.18.36           |
+| 3   | **Card `···` menu, "Manage booking"**: Edit booking ("Makes changes to your booking"), Share trip ("Share this trip with people"), Delete booking in red ("Remove booking from your list")                                                                                                                                                                                                                         | 05.18.36, 05.19.13 |
+| 4   | **"Team bookings" tab**: the same grid                                                                                                                                                                                                                                                                                                                                                                             | 05.18.43           |
+| 5   | **"Upcoming / Past" tabs**: a search icon only, no status filter. The past cards are all **Paid**.                                                                                                                                                                                                                                                                                                                 | 05.19.59           |
+| 6   | **Share trip dialog**: "Share this trip with people, team members etc." with two switches. **Get a link**: "Share trip dates and services, but hide traveller names and prices". **Send via email**: "Share the full trip details and travellers. We won't send any prices, confirmation numbers, or tickets."                                                                                                     | 05.19.22           |
+| 7   | **Get a link, on**: a trip picker ("Flight to United States · Roundtrip LOS - IST"), and a read-only link with a **Copy** button                                                                                                                                                                                                                                                                                   | 05.19.32           |
+| 8   | **Send via email, on**: a "Select email" dropdown of team members (avatar or initials, name, email)                                                                                                                                                                                                                                                                                                                | 05.19.40, 05.19.48 |
+| 9   | **Trip page, Itinerary tab**: "Back to bookings", photo, **"United States trip"**, "Thu, May 1 - Thu, May 8", "Pittsburgh, PA", a `···` menu, tabs **Itinerary · Flights · Trains**, then a **map panel** on the right. Below the tabs is a timeline: a day heading in a tall condensed font ("THU, MAY 1"), stop dots ("Lagos, LOS"; "Doha, DOH · Layover in Doha: ~2h 35m"), and booking cards between the dots. | 05.20.13           |
+| 10  | **Trip `···` menu, "Manage booking"**: Edit trip, Print itinerary, Add to calendar, Delete trip (red)                                                                                                                                                                                                                                                                                                              | 05.20.13           |
+| 11  | **Booking card** (a flight or train leg): ✈/🚆 icon, "LOS - DOH", **Booked** badge, a `···` menu; a blue strip "Booked on Pegasus Airlines" with ✕; depart time, city and airport ("Lagos, NG (EWR)"), aircraft and duration, "Confirmation PE24FB", the airline logo; arrive time and place                                                                                                                       | 05.20.13           |
+| 12  | **Booking `···` menu**: Edit booking, Delete booking (red)                                                                                                                                                                                                                                                                                                                                                         | 05.20.20           |
+| 13  | **Flights tab / Trains tab**: the same timeline with only that kind of booking                                                                                                                                                                                                                                                                                                                                     | 05.20.20, 05.20.26 |
 
 **Not designed** (built on existing patterns, then adjusted when designs arrive):
 
@@ -91,10 +91,10 @@ Screen text still says what the design says.
 
 ### Routes (in `src/app/routes.tsx`)
 
-| Path | Page | URL search params |
-| --- | --- | --- |
-| `/bookings` | Bookings list (screens 1–8) | `owner=mine\|team`, `when=upcoming\|past`, `status`, `q` |
-| `/bookings/$tripId` | Trip page (screens 9–13) | `tab=itinerary\|flights\|trains` |
+| Path                | Page                        | URL search params                                        |
+| ------------------- | --------------------------- | -------------------------------------------------------- |
+| `/bookings`         | Bookings list (screens 1–8) | `owner=mine\|team`, `when=upcoming\|past`, `status`, `q` |
+| `/bookings/$tripId` | Trip page (screens 9–13)    | `tab=itinerary\|flights\|trains`                         |
 
 - **Filters and tabs live in the URL.** TanStack Router checks them with a Zod schema. Back and forward then work, and a filtered list can be shared. Defaults (`mine`, `upcoming`, all statuses) are left out of the URL.
 - **Breadcrumbs:** "Home > Bookings", and "Home > Bookings > United States trip" on the trip page. Home has the sparkle icon and links to `/chat`, as in the chat pages. The design's `···` after the breadcrumb is left out, as it is in chat.
@@ -103,13 +103,13 @@ Screen text still says what the design says.
 
 ### Actions in the `···` menus
 
-| Action | What it does |
-| --- | --- |
-| **Edit booking / Edit trip** | Goes to `/chat?tripId=…` (plus `&bookingId=…` for one leg). The chat starts with that trip attached, and the LLM makes the change. The chat session adds the handling for these params; until then `/chat` simply opens. |
-| **Share trip** | Opens the Share trip dialog (section 4). |
-| **Delete booking / Delete trip** | Asks first, in a confirm dialog. Then removes it and shows a toast. |
-| **Print itinerary** | `window.print()`, with a print stylesheet that hides the sidebar, map and menus and prints the timeline. |
-| **Add to calendar** | Downloads a `.ics` file with one event per leg. This works with Apple, Google and Outlook calendars, and needs no account. |
+| Action                           | What it does                                                                                                                                                                                                             |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Edit booking / Edit trip**     | Goes to `/chat?tripId=…` (plus `&bookingId=…` for one leg). The chat starts with that trip attached, and the LLM makes the change. The chat session adds the handling for these params; until then `/chat` simply opens. |
+| **Share trip**                   | Opens the Share trip dialog (section 4).                                                                                                                                                                                 |
+| **Delete booking / Delete trip** | Asks first, in a confirm dialog. Then removes it and shows a toast.                                                                                                                                                      |
+| **Print itinerary**              | `window.print()`, with a print stylesheet that hides the sidebar, map and menus and prints the timeline.                                                                                                                 |
+| **Add to calendar**              | Downloads a `.ics` file with one event per leg. This works with Apple, Google and Outlook calendars, and needs no account.                                                                                               |
 
 ### Map (trip page)
 
@@ -123,14 +123,14 @@ Screen text still says what the design says.
 
 None of these exist yet. Chat will need some of them too (Dialog for "Share chat", DropdownMenu for the chat `···` menu). They go in `src/shared/ui/`, each with stories, and are **merged to `main` quickly** so the chat session doesn't build its own.
 
-| Component | Built on | Used for |
-| --- | --- | --- |
-| **DropdownMenu** | Radix DropdownMenu | The `···` menus. It has a label ("Manage booking"), items with an icon and a description line, and a red `destructive` item. |
-| **Dialog** | Radix Dialog | Share trip |
-| **AlertDialog** | Radix AlertDialog | Confirm delete |
-| **Switch** | Radix Switch | Get a link, Send via email |
-| **Tabs** | Radix Tabs, styled like the existing ToggleGroup pills | My / Team bookings; Itinerary / Flights / Trains |
-| **Avatar** | Radix Avatar | Team members: photo, with initials as the fallback ("TF") |
+| Component        | Built on                                               | Used for                                                                                                                     |
+| ---------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| **DropdownMenu** | Radix DropdownMenu                                     | The `···` menus. It has a label ("Manage booking"), items with an icon and a description line, and a red `destructive` item. |
+| **Dialog**       | Radix Dialog                                           | Share trip                                                                                                                   |
+| **AlertDialog**  | Radix AlertDialog                                      | Confirm delete                                                                                                               |
+| **Switch**       | Radix Switch                                           | Get a link, Send via email                                                                                                   |
+| **Tabs**         | Radix Tabs, styled like the existing ToggleGroup pills | My / Team bookings; Itinerary / Flights / Trains                                                                             |
+| **Avatar**       | Radix Avatar                                           | Team members: photo, with initials as the fallback ("TF")                                                                    |
 
 Bookings also needs:
 
@@ -266,17 +266,17 @@ To be confirmed or replaced when mobile designs exist.
 
 Each milestone ends with: stories for any new components; a11y checks passing; `pnpm lint`, `typecheck`, `test` and `build` green; and a visual check against the screenshots at desktop width and at 375px.
 
-| # | Milestone | Done when |
-| --- | --- | --- |
-| **M0** ✅ | **Baseline:** `main` fast-forwarded; `bookings-ui` worktree created | `git worktree list` shows `travelOps-bookings` |
-| **M1** | **Dependencies + shared components** (section 3): TanStack Query, Bebas Neue, DropdownMenu, Dialog, AlertDialog, Switch, Tabs, Avatar. Merged to `main`. | Each has stories, with keyboard tests for DropdownMenu and Dialog (Esc closes, focus returns) |
-| **M2** | **Data:** types and Zod schemas, mock service, mock data copied from the screenshots, query hooks, `itinerary.ts` / `calendar.ts` / `format.ts` with unit tests | Unit tests pass; hooks return the mock trips |
-| **M3** | **Bookings list:** header, tabs with counts, Upcoming / Past, search, status filter, card grid, URL params, loading / empty / no-match / error states | Matches screens 1, 2, 4 and 5; filters survive a refresh and the back button |
-| **M4** | **Card actions:** `···` menu, Edit → chat, confirm delete with toast and focus handling | Matches screen 3; delete works by keyboard alone |
-| **M5** | **Share trip dialog:** switches, trip picker, link + Copy, recipient picker, Send | Matches screens 6–8; fully usable with VoiceOver |
-| **M6** | **Trip page:** header and menu, tabs, timeline with stops and layovers, booking cards and their menu, print stylesheet, Add to calendar | Matches screens 9–13 (without the map); the printout is readable; the `.ics` file opens in Apple Calendar |
-| **M7** | **Map:** split layout, `MapPanel`, stop markers and route line, lazy-loaded; the mobile Map sheet | Matches screen 9; the list route doesn't load the map library |
-| **M8** | **Mobile and polish:** the section 6 layouts on a real iPhone, the `review-animations` pass, one Playwright test (list → trip → share) on the mock | The e2e test passes; checked on an iPhone |
+| #         | Milestone                                                                                                                                                       | Done when                                                                                                 |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| **M0** ✅ | **Baseline:** `main` fast-forwarded; `bookings-ui` worktree created                                                                                             | `git worktree list` shows `travelOps-bookings`                                                            |
+| **M1**    | **Dependencies + shared components** (section 3): TanStack Query, Bebas Neue, DropdownMenu, Dialog, AlertDialog, Switch, Tabs, Avatar. Merged to `main`.        | Each has stories, with keyboard tests for DropdownMenu and Dialog (Esc closes, focus returns)             |
+| **M2**    | **Data:** types and Zod schemas, mock service, mock data copied from the screenshots, query hooks, `itinerary.ts` / `calendar.ts` / `format.ts` with unit tests | Unit tests pass; hooks return the mock trips                                                              |
+| **M3**    | **Bookings list:** header, tabs with counts, Upcoming / Past, search, status filter, card grid, URL params, loading / empty / no-match / error states           | Matches screens 1, 2, 4 and 5; filters survive a refresh and the back button                              |
+| **M4**    | **Card actions:** `···` menu, Edit → chat, confirm delete with toast and focus handling                                                                         | Matches screen 3; delete works by keyboard alone                                                          |
+| **M5**    | **Share trip dialog:** switches, trip picker, link + Copy, recipient picker, Send                                                                               | Matches screens 6–8; fully usable with VoiceOver                                                          |
+| **M6**    | **Trip page:** header and menu, tabs, timeline with stops and layovers, booking cards and their menu, print stylesheet, Add to calendar                         | Matches screens 9–13 (without the map); the printout is readable; the `.ics` file opens in Apple Calendar |
+| **M7**    | **Map:** split layout, `MapPanel`, stop markers and route line, lazy-loaded; the mobile Map sheet                                                               | Matches screen 9; the list route doesn't load the map library                                             |
+| **M8**    | **Mobile and polish:** the section 6 layouts on a real iPhone, the `review-animations` pass, one Playwright test (list → trip → share) on the mock              | The e2e test passes; checked on an iPhone                                                                 |
 
 M1 comes first. After it, M2 and the M3 layout can run side by side. M4 and M5 need M3; M7 needs M6.
 
