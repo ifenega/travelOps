@@ -32,6 +32,9 @@ const buttonVariants = cva(
         secondary: "bg-foreground/5 text-foreground hover:bg-foreground/10 disabled:text-gray-500",
         // For icon-only controls such as a close (✕) or help (?) button.
         ghost: "text-muted-foreground hover:bg-foreground/5 hover:text-foreground",
+        // A round white button over a photo, e.g. the ··· on a trip card.
+        overlay:
+          "bg-white/90 text-gray-800 shadow-xs hover:bg-white dark:bg-gray-900/90 dark:text-gray-100 dark:hover:bg-gray-900",
       },
       size: {
         xs: "min-h-7 rounded-md px-2 py-1 text-xs [&_svg]:size-4",
@@ -42,6 +45,8 @@ const buttonVariants = cva(
         icon: "size-8 rounded-md",
       },
     },
+    // Listed after the sizes, so it beats their rounded-md.
+    compoundVariants: [{ variant: "overlay", className: "rounded-full" }],
     defaultVariants: {
       variant: "primary",
       size: "md",

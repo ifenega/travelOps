@@ -5,8 +5,18 @@ import {
   notFound,
   type RouterHistory,
   redirect,
+  stripSearchParams,
 } from "@tanstack/react-router"
 import { Stars02 } from "@untitledui/icons"
+import { z } from "zod"
+import {
+  BookingsPage,
+  bookingsSearchDefaults,
+  bookingsSearchSchema,
+  TripPage,
+  tripSearchDefaults,
+  tripSearchSchema,
+} from "@/features/bookings"
 import { type FlagName, isEnabled } from "@/shared/flags/flags"
 import { DashboardLayout } from "./layout/dashboard-layout"
 import { ErrorPage, RootErrorPage } from "./pages/error-page"
@@ -39,6 +49,11 @@ const indexRoute = createRoute({
 const chatRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/chat",
+  // "Edit booking" opens a chat about that trip (or one leg of it). The chat feature reads these.
+  validateSearch: z.object({
+    tripId: z.string().optional().catch(undefined),
+    bookingId: z.string().optional().catch(undefined),
+  }),
   component: () => (
     <PlaceholderPage
       title="New chat"
@@ -51,7 +66,18 @@ const bookingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/bookings",
   beforeLoad: requireFlag("bookings"),
-  component: () => <PlaceholderPage title="Bookings" />,
+  validateSearch: bookingsSearchSchema,
+  search: { middlewares: [stripSearchParams(bookingsSearchDefaults)] },
+  component: BookingsPage,
+})
+
+const tripRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/bookings/$tripId",
+  beforeLoad: requireFlag("bookings"),
+  validateSearch: tripSearchSchema,
+  search: { middlewares: [stripSearchParams(tripSearchDefaults)] },
+  component: TripPage,
 })
 
 const expensesRoute = createRoute({
@@ -104,6 +130,7 @@ export const routeTree = rootRoute.addChildren([
   indexRoute,
   chatRoute,
   bookingsRoute,
+  tripRoute,
   expensesRoute,
   walletRoute,
   policiesRoute,

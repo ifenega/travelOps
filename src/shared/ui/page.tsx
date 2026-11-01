@@ -31,7 +31,7 @@ export function Page({ title, breadcrumbs = [{ label: title }], actions, childre
   return (
     <>
       <title>{`${title} · TravelOps`}</title>
-      <header className="shrink-0 border-b pt-[env(safe-area-inset-top)]">
+      <header className="shrink-0 border-b pt-[env(safe-area-inset-top)] print:hidden">
         <div className="flex h-12 items-center gap-2 px-4">
           <SidebarCollapsedHeader />
           <Breadcrumbs items={breadcrumbs} />
@@ -48,7 +48,7 @@ export function Page({ title, breadcrumbs = [{ label: title }], actions, childre
       <main
         id="main"
         tabIndex={-1}
-        className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)]"
+        className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] print:overflow-visible"
       >
         {children}
       </main>

@@ -18,7 +18,18 @@ export function useTrips(when: TripsWhen) {
 }
 
 export function useTrip(id: string) {
-  return useQuery({ queryKey: keys.trip(id), queryFn: () => bookingsService.getTrip(id) })
+  const queryClient = useQueryClient()
+  return useQuery({
+    queryKey: keys.trip(id),
+    queryFn: () => bookingsService.getTrip(id),
+    // Opened from the list? Show the trip it already has straight away, then refresh it.
+    initialData: () =>
+      queryClient
+        .getQueriesData<Trip[]>({ queryKey: ["trips", "list"] })
+        .flatMap(([, trips]) => trips ?? [])
+        .find((trip) => trip.id === id),
+    initialDataUpdatedAt: 0,
+  })
 }
 
 export function useTeamMembers() {

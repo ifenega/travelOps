@@ -88,7 +88,7 @@ export function Sidebar({ children }: { children: ReactNode }) {
         data-slot="sidebar"
         inert={!sidebar.desktopOpen}
         className={cn(
-          "hidden shrink-0 overflow-hidden transition-[width] duration-250 ease-in-out motion-reduce:transition-none lg:block",
+          "hidden shrink-0 overflow-hidden transition-[width] duration-250 ease-in-out motion-reduce:transition-none lg:block print:hidden",
           sidebar.desktopOpen ? "w-60" : "w-0",
         )}
       >

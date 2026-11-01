@@ -20,14 +20,20 @@ const SelectValue = SelectPrimitive.Value
 function SelectTrigger({
   className,
   children,
+  variant = "filled",
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Trigger>) {
+}: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
+  /** "filled" is the grey pill (child age); "outline" is white with a border, like an input. */
+  variant?: "filled" | "outline"
+}) {
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        "inline-flex min-h-8 items-center justify-between gap-2 rounded-lg border border-transparent bg-foreground/5 px-3 text-sm pointer-coarse:min-h-11",
-        "transition-[background-color,border-color,box-shadow] duration-150 ease-out hover:bg-foreground/10",
+        "inline-flex min-h-8 items-center justify-between gap-2 rounded-lg border px-3 text-left text-sm pointer-coarse:min-h-11",
+        "transition-[background-color,border-color,box-shadow] duration-150 ease-out",
+        variant === "filled" && "border-transparent bg-foreground/5 hover:bg-foreground/10",
+        variant === "outline" && "border-border bg-background shadow-xs hover:bg-muted",
         "focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2",
         "data-[state=open]:border-primary-500 data-[state=open]:bg-background data-[state=open]:ring-4 data-[state=open]:ring-primary-600/15",
         "data-placeholder:text-muted-foreground disabled:pointer-events-none disabled:opacity-50",
