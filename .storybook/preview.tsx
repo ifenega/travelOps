@@ -1,12 +1,9 @@
 import { withThemeByClassName } from "@storybook/addon-themes"
 import type { Preview } from "@storybook/react-vite"
-import { QueryClientProvider } from "@tanstack/react-query"
-import { createQueryClient } from "@/shared/lib/query-client"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Toaster } from "@/shared/ui/toast"
 import { TooltipProvider } from "@/shared/ui/tooltip"
 import "@/shared/styles/globals.css"
-
-const queryClient = createQueryClient()
 
 const preview: Preview = {
   parameters: {
@@ -22,8 +19,11 @@ const preview: Preview = {
     },
   },
   decorators: [
+    // A fresh query client per story, so cached data never leaks from one story to the next.
     (Story) => (
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider
+        client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}
+      >
         <TooltipProvider>
           <Story />
           <Toaster />

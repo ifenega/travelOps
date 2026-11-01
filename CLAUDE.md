@@ -127,6 +127,17 @@ Follow `.claude/skills/emil-design-eng` and `animate`.
 - **Unit tests:** only for real logic in `lib/` or `features/*/utils`.
 - **Playwright end-to-end tests:** start when real API flows exist (phase 2).
 
+## Git (several Claude sessions work in parallel)
+
+- **One branch per section:** `chat-ui`, `bookings-ui`, … Each session works in its own folder or git worktree.
+- **Never reset, force-move or rewrite `main`.** Other sessions' commits live there; resetting it silently drops them.
+- **To put your work on `main`:**
+  1. Merge `main` into your branch first and fix any conflicts there.
+  2. Run `pnpm lint`, `typecheck`, `test` and `build`.
+  3. Then `git switch main && git merge --ff-only <your-branch>`. If the fast-forward is refused, `main` moved: go back to step 1.
+- **Commit messages** have no "Co-Authored-By" or other attribution lines.
+- **Screenshots aren't in git** (`uiscreenshot/` is ignored). Sessions in a worktree read them from `/Users/ifeoluwa/personal/travelOps/uiscreenshot/`.
+
 ## Mobile
 
 - **Test on a real iPhone:** run `pnpm dev:phone`, open the LAN URL in Safari, and inspect with Safari Web Inspector on the Mac.

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@fontsource-variable/inter";
+@import "@fontsource/bebas-neue/latin-400.css";
 @import "./tokens.css";
 
 @layer base {

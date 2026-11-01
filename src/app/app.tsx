@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/shared/ui/tooltip"
 import { createAppRouter } from "./routes"
 
 const router = createAppRouter()
+
+// Server data (loading, errors, caching). Stories make their own client in .storybook/preview.tsx.
 const queryClient = createQueryClient()
 
 export function App() {
