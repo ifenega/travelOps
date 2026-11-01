@@ -16,7 +16,20 @@ import {
   tripSearchDefaults,
   tripSearchSchema,
 } from "@/features/bookings"
-import { ConversationPage, chatExists, NewChatPage } from "@/features/chat"
+import {
+  ConversationPage,
+  chatExists,
+  conversationSearchDefaults,
+  conversationSearchSchema,
+  NewChatPage,
+} from "@/features/chat"
+import {
+  bookingExists,
+  ExtrasPage,
+  ItineraryPage,
+  PassengersPage,
+  PaymentPage,
+} from "@/features/checkout"
 import { type FlagName, isEnabled } from "@/shared/flags/flags"
 import { DashboardLayout } from "./layout/dashboard-layout"
 import { ErrorPage, RootErrorPage } from "./pages/error-page"
@@ -63,6 +76,9 @@ const conversationRoute = createRoute({
   beforeLoad: ({ params }) => {
     if (!chatExists(params.chatId)) throw notFound()
   },
+  // ?view=results shows the chat's flights full width, with filters and page in the URL.
+  validateSearch: conversationSearchSchema,
+  search: { middlewares: [stripSearchParams(conversationSearchDefaults)] },
   component: function Conversation() {
     const { chatId } = conversationRoute.useParams()
     return <ConversationPage chatId={chatId} />
@@ -85,6 +101,57 @@ const tripRoute = createRoute({
   validateSearch: tripSearchSchema,
   search: { middlewares: [stripSearchParams(tripSearchDefaults)] },
   component: TripPage,
+})
+
+// Checkout: full pages without the sidebar (staticData.fullPage), one per step.
+const checkoutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/checkout/$bookingId",
+  staticData: { fullPage: true },
+  beforeLoad: ({ params }) => {
+    requireFlag("checkout")()
+    if (!bookingExists(params.bookingId)) throw notFound()
+  },
+})
+
+const checkoutIndexRoute = createRoute({
+  getParentRoute: () => checkoutRoute,
+  path: "/",
+  beforeLoad: ({ params }) => {
+    throw redirect({ to: "/checkout/$bookingId/passengers", params })
+  },
+})
+
+const passengersRoute = createRoute({
+  getParentRoute: () => checkoutRoute,
+  path: "/passengers",
+  component: function Passengers() {
+    return <PassengersPage bookingId={passengersRoute.useParams().bookingId} />
+  },
+})
+
+const extrasRoute = createRoute({
+  getParentRoute: () => checkoutRoute,
+  path: "/extras",
+  component: function Extras() {
+    return <ExtrasPage bookingId={extrasRoute.useParams().bookingId} />
+  },
+})
+
+const itineraryRoute = createRoute({
+  getParentRoute: () => checkoutRoute,
+  path: "/itinerary",
+  component: function Itinerary() {
+    return <ItineraryPage bookingId={itineraryRoute.useParams().bookingId} />
+  },
+})
+
+const paymentRoute = createRoute({
+  getParentRoute: () => checkoutRoute,
+  path: "/payment",
+  component: function Payment() {
+    return <PaymentPage bookingId={paymentRoute.useParams().bookingId} />
+  },
 })
 
 const expensesRoute = createRoute({
@@ -139,6 +206,13 @@ export const routeTree = rootRoute.addChildren([
   conversationRoute,
   bookingsRoute,
   tripRoute,
+  checkoutRoute.addChildren([
+    checkoutIndexRoute,
+    passengersRoute,
+    extrasRoute,
+    itineraryRoute,
+    paymentRoute,
+  ]),
   expensesRoute,
   walletRoute,
   policiesRoute,
@@ -162,5 +236,9 @@ export function createAppRouter(history?: RouterHistory) {
 declare module "@tanstack/react-router" {
   interface Register {
     router: ReturnType<typeof createAppRouter>
+  }
+  interface StaticDataRouteOption {
+    /** A page of its own without the dashboard's sidebar, e.g. checkout. */
+    fullPage?: boolean
   }
 }

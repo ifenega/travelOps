@@ -1,7 +1,8 @@
-import type { AssistantMessage, Chat, ChatMessage, QuestionOption } from "../chat"
+import type { AssistantMessage, Chat, ChatMessage, QuestionOption, UserMessage } from "../chat"
 import { describeSearch } from "../chat"
 import type { SearchRequest } from "../search"
 import { mockReply } from "./mock-assistant"
+import { findPlace } from "./places"
 
 // The chat "backend" for now: chats live in memory, and Sparky's replies come from
 // mock-assistant.ts, streamed word by word. Screens only use `chatService` and the hooks in
@@ -37,8 +38,11 @@ function updateMessage(chatId: string, messageId: string, change: Partial<ChatMe
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-/** Adds Sparky's reply to the latest message: thinking, then streamed, then done (or error). */
-async function reply(chatId: string) {
+/**
+ * Adds Sparky's reply to the latest message: thinking, then streamed, then done (or error).
+ * `search` is what the reply is about when the message doesn't carry it (an answer).
+ */
+async function reply(chatId: string, search?: SearchRequest) {
   const chat = chats.get(chatId)
   if (!chat) return
   const replyTo = chat.messages.at(-1)
@@ -54,7 +58,14 @@ async function reply(chatId: string) {
   updateChat(chatId, (current) => ({ ...current, messages: [...current.messages, message] }))
 
   await wait(1500)
-  const { text, question, fail } = mockReply(replyTo)
+  const { text, question, flights, fail, rateLimited } = mockReply(
+    replyTo,
+    search ?? replyTo.search,
+  )
+  if (rateLimited) {
+    updateMessage(chatId, message.id, { status: "error", error: "rate-limit" })
+    return
+  }
   const words = text.split(" ")
   let streamed = ""
   for (const [index, word] of words.entries()) {
@@ -69,6 +80,7 @@ async function reply(chatId: string) {
   updateMessage(chatId, message.id, {
     status: "done",
     question: question && { ...question, state: "open" },
+    flights,
   })
 }
 
@@ -107,15 +119,29 @@ export const chatService = {
     return chat.id
   },
 
-  send(chatId: string, text: string) {
-    addUserMessage(chatId, text)
+  /** Sends a message, or a new search from the search bar (shown as a summary bubble). */
+  send(chatId: string, text: string, search?: SearchRequest) {
+    addUserMessage(chatId, text, search)
     void reply(chatId)
   },
 
-  /** Answers Sparky's open question with one of its options. */
+  /**
+   * Answers Sparky's open question with one of its options. Picking an airport fills it into
+   * the chat's search; "I'm flexible" searches from the city as it is.
+   */
   answer(chatId: string, questionMessageId: string, option: QuestionOption) {
     closeQuestion(chatId, questionMessageId, "answered")
-    chatService.send(chatId, option.label)
+    const search = chats
+      .get(chatId)
+      ?.messages.findLast(
+        (message): message is UserMessage => message.role === "user" && !!message.search,
+      )?.search
+    const airport = findPlace(option.id)
+    addUserMessage(chatId, option.label)
+    void reply(
+      chatId,
+      search && airport && search.mode !== "stays" ? { ...search, origin: airport } : search,
+    )
   },
 
   dismissQuestion(chatId: string, questionMessageId: string) {

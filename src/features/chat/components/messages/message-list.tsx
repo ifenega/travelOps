@@ -8,9 +8,11 @@ import { UserMessage } from "./user-message"
 export function MessageList({
   chat,
   onRetry,
+  onSeeMoreFlights,
 }: {
   chat: Chat
   onRetry: (messageId: string) => void
+  onSeeMoreFlights: () => void
 }) {
   const [announcement, setAnnouncement] = useState("")
   const announced = useRef(new Set<string>())
@@ -23,7 +25,11 @@ export function MessageList({
         setAnnouncement(`Sparky: ${message.text}`)
       } else if (message.status === "error") {
         announced.current.add(message.id)
-        setAnnouncement("Sparky couldn't finish this reply.")
+        setAnnouncement(
+          message.error === "rate-limit"
+            ? "You're sending messages quickly. Wait a minute, then try again."
+            : "Sparky couldn't finish this reply.",
+        )
       }
     }
   }, [chat.messages])
@@ -37,7 +43,11 @@ export function MessageList({
             {message.role === "user" ? (
               <UserMessage message={message} />
             ) : (
-              <AssistantMessage message={message} onRetry={() => onRetry(message.id)} />
+              <AssistantMessage
+                message={message}
+                onRetry={() => onRetry(message.id)}
+                onSeeMoreFlights={onSeeMoreFlights}
+              />
             )}
           </li>
         ))}

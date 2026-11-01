@@ -91,7 +91,9 @@ export const SearchingFlights: Story = {
     const again = within(await page.findByRole("dialog", { name: "Passengers" }))
     await userEvent.click(again.getByRole("combobox", { name: "Child 1 age" }))
     await userEvent.click(await page.findByRole("option", { name: "7 years old" }))
+    await waitFor(() => expect(page.queryByRole("listbox")).toBeNull())
     await userEvent.keyboard("{Escape}")
+    await waitFor(() => expect(page.queryByRole("dialog")).toBeNull())
     await waitFor(() => expect(canvas.queryByRole("alert")).toBeNull())
 
     await userEvent.click(canvas.getByRole("button", { name: "Search flights" }))

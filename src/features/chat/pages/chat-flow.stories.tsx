@@ -91,3 +91,48 @@ export const AnsweringAQuestion: Story = {
     await expect(canvas.getByText("Abuja")).toBeInTheDocument()
   },
 }
+
+/** "#ratelimit" in a message shows the "too many messages" state, with Try again. */
+export const RateLimited: Story = {
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.type(
+      await canvas.findByRole("textbox", { name: "Message" }),
+      "Flights to Rome #ratelimit{Enter}",
+    )
+    await waitFor(
+      () => expect(canvas.getByText("You're sending messages quickly")).toBeInTheDocument(),
+      slow,
+    )
+    await expect(canvas.getByRole("button", { name: "Try again" })).toBeInTheDocument()
+  },
+}
+
+/** Behaviour: an airport search gets results in the chat; "See more flights" opens them full width. */
+export const SeeingFlightResults: Story = {
+  play: async ({ canvas, userEvent, canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body)
+    await userEvent.click(await canvas.findByRole("radio", { name: "Flights" }))
+    await userEvent.type(canvas.getByRole("combobox", { name: "From" }), "Lagos")
+    await userEvent.click(await canvas.findByRole("option", { name: /Murtala/ }))
+    await userEvent.type(canvas.getByRole("combobox", { name: "To" }), "Athens")
+    await userEvent.click(await canvas.findByRole("option", { name: /Eleftherios/ }))
+    await userEvent.click(canvas.getByRole("button", { name: /^When/ }))
+    const dates = within(await page.findByRole("dialog", { name: "Travel dates" }))
+    await userEvent.click(dates.getByRole("button", { name: /next month/i }))
+    await userEvent.click(dates.getAllByRole("button", { name: /\b10th\b/ })[0])
+    await userEvent.click(dates.getAllByRole("button", { name: /\b15th\b/ })[0])
+    await userEvent.click(dates.getByRole("button", { name: "Done" }))
+    await userEvent.click(canvas.getByRole("button", { name: /^Passengers/ }))
+    await userEvent.keyboard("{Escape}")
+    await userEvent.click(canvas.getByRole("button", { name: "Search flights" }))
+
+    const results = await waitFor(
+      () => canvas.getByRole("region", { name: "Flight results" }),
+      slow,
+    )
+    await userEvent.click(within(results).getByRole("button", { name: "See more flights" }))
+    await expect(
+      await canvas.findByRole("heading", { level: 1, name: /Departing flight for/ }),
+    ).toHaveFocus()
+  },
+}

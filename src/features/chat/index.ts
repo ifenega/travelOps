@@ -9,6 +9,7 @@ export { useChats } from "./hooks/use-chat"
 export { ConversationPage } from "./pages/conversation-page"
 export { NewChatPage } from "./pages/new-chat-page"
 export type { Place, SearchRequest, Travellers, TravelMode } from "./search"
+export { conversationSearchDefaults, conversationSearchSchema } from "./search-params"
 
 /** For the router: unknown chat ids show the 404 page. */
 export const chatExists = (chatId: string) => chatService.getChat(chatId) !== undefined

@@ -116,6 +116,10 @@
     --animate-collapsible-close: reduced-fade-out 200ms ease-out;
     --animate-sheet-in: reduced-fade-in 300ms ease-out;
     --animate-sheet-out: reduced-fade-out 200ms ease-out;
+    --animate-sheet-right-in: reduced-fade-in 300ms ease-out;
+    --animate-sheet-right-out: reduced-fade-out 200ms ease-out;
+    /* Loading spinners still show activity, without turning. */
+    --animate-spin: reduced-pulse 1s ease-in-out infinite alternate;
     --animate-sparkle-large: reduced-pulse 1.8s ease-in-out infinite alternate;
     --animate-sparkle-small: reduced-pulse 1.8s ease-in-out -0.9s infinite alternate;
   }

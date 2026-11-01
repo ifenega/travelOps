@@ -1,4 +1,6 @@
+import type { FlightSearch } from "@/features/flights"
 import { formatDateRange } from "@/shared/ui/date-range-picker"
+import { airportFor } from "./api/places"
 import type { Place, SearchRequest, Travellers } from "./search"
 
 // What a conversation is made of. The mock service and the real API both produce these.
@@ -32,7 +34,11 @@ export type AssistantMessage = {
   createdAt: number
   text: string
   status: "thinking" | "streaming" | "done" | "error"
+  /** Why it failed, when it's not a plain error. */
+  error?: "rate-limit"
   question?: Question
+  /** Flight results to show under the text (design screen 15). */
+  flights?: FlightSearch
 }
 
 export type ChatMessage = UserMessage | AssistantMessage
@@ -89,4 +95,25 @@ export function searchDetails(search: SearchRequest): [string, string][] {
   ]
   if (search.mode === "flights") rows.push(["Cabin", "Economy"])
   return rows
+}
+
+/** The flights search for a chat's search request, which the flights feature understands. */
+export function toFlightSearch(search: Exclude<SearchRequest, { mode: "stays" }>) {
+  const airport = (place: Place) => {
+    const match = airportFor(place)
+    return {
+      code: match?.id ?? place.name.slice(0, 3).toUpperCase(),
+      // "Athens Eleftherios Venizelos (ATH)" → "Athens Eleftherios Venizelos"
+      name: (match?.name ?? place.name).replace(/\s*\([A-Z]{3}\)$/, ""),
+      city: shortPlaceName(place),
+    }
+  }
+  const { adults, childAges, infants } = search.travellers
+  return {
+    from: airport(search.origin),
+    to: airport(search.destination),
+    departDate: search.dates.from,
+    returnDate: search.dates.to,
+    passengers: adults + childAges.length + infants,
+  } satisfies FlightSearch
 }

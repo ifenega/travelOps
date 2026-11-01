@@ -230,3 +230,15 @@ export function airportsInCountryOf(place: Place) {
   const country = place.region.split(",").at(-1)?.trim() ?? ""
   return places.filter((p) => p.kind === "airport" && p.region.endsWith(country))
 }
+
+/** A place by its id, e.g. the airport picked in Sparky's question. */
+export function findPlace(id: string) {
+  return places.find((place) => place.id === id)
+}
+
+/** The airport to search from or to: the place itself, or the main airport for a city. */
+export function airportFor(place: Place) {
+  if (place.kind === "airport") return place
+  const airports = airportsInCountryOf(place)
+  return airports.find((airport) => airport.region.startsWith(place.name)) ?? airports[0]
+}
