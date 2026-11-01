@@ -2,16 +2,30 @@
 
 **Scope:** the chat section's UI, frontend only. There is no backend work in this phase. Every server call goes through a typed service with a **mock implementation**, so the UI works end to end now and switches to the real API later without touching screens.
 
-**Designs:** `uiscreenshot/chat/` (15 screenshots, 2026-11-01). Mobile isn't designed; see [Mobile](#mobile-proposed-no-designs-yet).
+**Designs:** `uiscreenshot/chat/`, grouped by flow (51 screenshots, 2026-11-01). Mobile isn't designed; see [Mobile](#mobile-proposed-no-designs-yet).
 
-- **More chat screenshots are coming.** The flight booking part of the chat includes the assistant replies and result cards.
-- **When they arrive,** regroup `uiscreenshot/chat/` into subfolders by flow (e.g. `01-new-chat-and-search/`, `02-conversation-and-map/`, `03-flight-booking/`) and update section 1.
+```
+uiscreenshot/chat/
+  01-new-chat-and-search/        13  (section 1a, screens 1–7)
+  02-conversation-and-map/        3  (section 1a, screens 8–10)
+  03-flight-booking/
+    01-in-chat/                   9  (section 1b, screens 11–14)
+    02-results-and-fares/         8  (screens 15–19)
+    03-passengers/                7  (screens 20–22)
+    04-seats-and-extras/          7  (screens 23–25)
+    05-itinerary/                 1  (screen 26)
+    06-payment-result/            3  (screens 27–28)
+```
+
+`uiscreenshot/` is git-ignored, so **sessions in a git worktree don't have it**. Point them at `/Users/ifeoluwa/personal/travelOps/uiscreenshot/`.
 
 Read `CLAUDE.md` first. Its rules (simplicity, accessibility, tokens, animation) apply to everything here.
 
 ---
 
 ## 1. What the designs show
+
+### 1a. New chat, search bar and conversation
 
 | #   | Screen / state                                                                                                                                                                                                                                                                                                                                | Screenshots       |
 | --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
@@ -26,9 +40,48 @@ Read `CLAUDE.md` first. Its rules (simplicity, accessibility, tokens, animation)
 | 9   | **Sidebar collapsed to an icon rail** (icons only, labels hidden), in the conversation view                                                                                                                                                                                                                                                   | 03.01.09          |
 | 10  | **Map expanded**: the map fills the panel and the chat column is hidden                                                                                                                                                                                                                                                                       | 03.01.17          |
 
+### 1b. Flight booking (`03-flight-booking/`)
+
+The assistant is called **Sparky** ("Hello — I'm Sparky, your travel assistant").
+
+**In the chat** (`01-in-chat/`)
+
+| #   | Screen / state                                                                                                                                                                                                                                                                                          |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 11  | **User summary bubble** gains a time ("11:56 PM") and two icon actions below it: **edit** (pencil) and **copy** (tooltip "Copy text").                                                                                                                                                                  |
+| 12  | **Thinking:** a small round sparkle avatar plus a word that cycles "Thinking…" → "Juggling…" → "Crafting…". The sparkle SVG has been supplied and its stars animate (built: `ThinkingIndicator`).                                                                                                       |
+| 13  | **Assistant text reply:** plain paragraphs, no bubble.                                                                                                                                                                                                                                                  |
+| 14  | **Clarifying question card**, which replaces the prompt input: "What airport would you like to depart from?", a search field, an option list (Lagos, Abuja, Port Harcourt, Kano, I'm flexible ›), paging "‹ 1 ›", **Dismiss** and **Next**. Typing turns the list into airport results (✈, name, city). |
+
+**Results** (`02-results-and-fares/`)
+
+| #   | Screen / state                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 15  | **Results inside the chat column:**<br>• the assistant's summary text<br>• an inline search bar<br>• filter buttons (Any stops, Airlines, Any time, Economy)<br>• "4 of 200 results"<br>• compact **round-trip cards** (two legs; airline logo, times, duration, stops, "+1", price, "Round trip", →)<br>• "See more flights"<br>The list scrolls under the pinned prompt.                                                                                                                                                                                                                                                                                              |
+| 16  | **Full-width results** (map hidden, sidebar as a rail):<br>• trip summary line ("Lagos to Greece · Round trip · Jun 24 - Jul 8 · 1 adult, 4 children, 2 infants")<br>• a **Hide/Show search** switch<br>• the search bar<br>• "**Departing flight** for Fri, Jun 26"<br>• filters: Any stops, Airlines, Any time, Economy, **Within policy**, Filter, Sort<br>• **flight cards:** airline logo, flight-number chips, times, duration line, "1 stop · 2h 15m stop in DOH", "See flight details", a **policy icon** (green = in policy, orange = out of policy), price, "Round trip", **Select ›**<br>• "4 of 200 results"<br>• pagination (1 2 … 10 11, Previous / Next) |
+| 17  | **Select opens fare options** under the card: a sideways carousel of fare cards. Each has a name ("Premium Light", "Economy (X)"), price "roundtrip", a policy icon, a list of included / not-included items (✓ / ⊘), and a **Select** button.                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| 18  | **Flight details dialog:**<br>• a timeline of segments: airport, time, date, duration, "Overnight flight" chip<br>• the airline / aircraft / cabin chips<br>• amenity chips (power, Wi-Fi)<br>• a "Long layover" badge between segments<br>The **out-of-policy icon** opens "Issue a conditional offer" with the reason ("The flight is too expensive. The maximum budget is GBP 450 per passenger.").                                                                                                                                                                                                                                                                  |
+| 19  | **Return flight:** the chosen departing flight is pinned as a summary card with "Edit departing flight"; then "**Return flight** for Fri, Jul 20" and the same list.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+
+**Checkout.** This is a **separate full-page layout**: the logo on the left, a **progress bar** (Search ✓ · Departing flight ✓ · Return flight ✓ · Passengers · Itinerary · Payment), ✕ on the right, and no sidebar. Headings use a **condensed display font** (Bebas Neue).
+
+| #   | Screen / state                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 20  | **Passengers** (`03-passengers/`):<br>• "‹ Flight selection" back link<br>• a dismissible info note ("Make sure your details exactly match…")<br>• an **accordion per passenger**: Title select (Mr…), first / last name, date of birth for children and infants, an infant warning ("must travel on the accompanying adult's lap"), and **Confirm**<br>• confirmed passengers collapse to an **avatar with initials**, name, type, ✓ and edit |
+| 21  | **Contact details** (email, phone, postal address), a **terms checkbox** with links, and **Proceed** (disabled until everything is valid).                                                                                                                                                                                                                                                                                                     |
+| 22  | **Overview side card:** both flights, "See flight details" (opens a **right-side sheet** with both journeys), "9 × Passenger £9,312", "**Increased by £0.32**" in red with a trend icon, total, "See price breakdown", and **Edit**.                                                                                                                                                                                                           |
+| 23  | **Loading interstitials:** the meditating traveller illustration plus a line ("Pulling up passengers options." / "Checking your baggage conditions." / "We're verifying your payment…") and a spinner. The illustration has been supplied.                                                                                                                                                                                                     |
+| 24  | **Seats and extras** (`04-seats-and-extras/`):<br>• Seats: per passenger, removable chips "Flight 1 · 9B · £56 ×", **Edit seats**, an infant note<br>• Loyalty points: **Add loyalty** dialog with a program Select and a number field; once added, Edit / Delete<br>• Carry-on baggage and checked baggage notes per leg<br>• Proceed                                                                                                         |
+| 25  | **Add loyalty dialog** (Select + input, Cancel / Save).                                                                                                                                                                                                                                                                                                                                                                                        |
+| 26  | **Review your trip itinerary** (`05-itinerary/`):<br>• trip name and dates, traveller chips<br>• **day-by-day timeline** ("WEDNESDAY, JULY 8") with flight cards and layovers<br>• **upsell cards** ("Rent a train now, decide later → Search trains", "Add a place to stay in Athens → Search stay")<br>• **Price breakdown** card with **Continue to checkout**                                                                              |
+| 27  | **Payment failed** (`06-payment-result/`): card-reader illustration, "PURCHASE FAILED", reason, "Next Step", **Contact support** / **Retry payment**.                                                                                                                                                                                                                                                                                          |
+| 28  | **Purchase successful:** trophy illustration, booking ID, tickets, date, "Next Step", **Back to home** / **View booking**.                                                                                                                                                                                                                                                                                                                     |
+
 **Not designed** (built on existing patterns, then adjusted when designs arrive):
 
-- **The assistant's reply** (streamed text, the "thinking" state, result cards): designs exist in the flight booking part of the chat, still to come.
+- **The payment form itself.** Only "verifying", "failed" and "successful" exist.
+- **Seat selection** ("Edit seats") and the **price breakdown**.
+- **The illustrations** for payment failed (card reader) and success (trophy) aren't supplied as SVGs yet.
 - **The date range picker:** follows existing patterns (section 8).
 - **What the map shows** (markers, popups).
 - **"Share chat" and the chat `···` menu:** later (section 8).
@@ -51,7 +104,24 @@ src/features/chat/
   pages/          new-chat-page.tsx, conversation-page.tsx
   types.ts        Chat, Message, SearchRequest, Place, …
   index.ts        public API (only these are imported from outside)
+
+src/features/flights/      results, fare options, flight details: used inside the chat AND full width
+  api/            flights-service.ts + mock (search, fares, details, policy)
+  components/     flight-card, round-trip-card, fare-options, flight-details, flight-filters, results-list, …
+  index.ts
+
+src/features/checkout/     the full-page booking flow after a flight is chosen
+  api/            checkout-service.ts + mock (passengers, seats, loyalty, itinerary, payment)
+  components/     checkout-layout, progress-steps, overview-card, passenger-form, loading-state, …
+  pages/          passengers, extras (seats, loyalty, baggage), itinerary, payment-result
+  index.ts
 ```
+
+**Why three features:**
+
+- **Flight results** appear in two places, the chat column and the full-width view, so they're their own feature that chat imports.
+- **Checkout** is a separate page flow with its own layout.
+- **Splitting them** keeps each folder small, and lets them be built in parallel later (section 7).
 
 ### Data, without a backend
 
@@ -66,18 +136,28 @@ src/features/chat/
   - Can be told to fail, to exercise error states (rate limit, stream cut off).
   - Replacing it with the real API later is one file.
 - **`PlacesService`:** a mock search over a small local list of airports, cities and stations.
+- **`FlightsService` (mock):** returns generated round-trip offers with fares, segments, layovers, amenities and a policy result (in / out of policy, with a reason). Filters, sort and paging run in the mock, like the real API would.
+- **`CheckoutService` (mock):**
+  - a draft booking holding the chosen flights, passengers, contact details, seats and loyalty
+  - a price that can change ("Increased by £0.32")
+  - payment that succeeds or fails on demand, so both result screens can be seen
 - **TanStack Query** handles request/response data: place search and the chat list, with caching and loading/error states for free.
 - **Streaming** goes through `useChat`, a small hook that holds the messages and appends chunks as they arrive. TanStack Query isn't built for streams, so it isn't used here.
 - **Types:** Zod schemas define the search request and the shapes the mock returns, so the real API can be validated against the same schemas later.
 
 ### Routes (in `src/app/routes.tsx`)
 
-| Path            | Page                                                                   |
-| --------------- | ---------------------------------------------------------------------- |
-| `/chat`         | New chat (screens 1–7)                                                 |
-| `/chat/$chatId` | Conversation (screens 8–10). The chat title appears in the breadcrumb. |
+| Path                              | Page                                                                                                                                                                   |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/chat`                           | New chat (screens 1–7)                                                                                                                                                 |
+| `/chat/$chatId`                   | Conversation (screens 8–19). The chat title appears in the breadcrumb. Full-width results are a view of the same route (`?view=results&leg=departing`), so Back works. |
+| `/checkout/$bookingId/passengers` | Screens 20–23. Checkout layout: no sidebar.                                                                                                                            |
+| `/checkout/$bookingId/extras`     | Seats, loyalty, baggage (24–25)                                                                                                                                        |
+| `/checkout/$bookingId/itinerary`  | Review (26)                                                                                                                                                            |
+| `/checkout/$bookingId/payment`    | Verifying → failed / successful (23, 27–28). The payment form is not designed.                                                                                         |
 
-Submitting the search bar or the prompt creates a chat and navigates to `/chat/$chatId`.
+- **Navigation:** submitting the search bar or the prompt creates a chat and navigates to `/chat/$chatId`. Choosing a fare creates a draft booking (mock) and opens checkout.
+- **URL state:** the results view's filters, sort and page live in the URL search params, validated by a Zod schema in the route. A refresh keeps them, and they're shareable.
 
 ### Map
 
@@ -102,24 +182,62 @@ The chat needs these, and other sections will too (a bookings form needs a Selec
 | **ToggleGroup**             | Radix ToggleGroup (single, can be cleared)                                                   | Flights · Trains · Stays. A toggle group, not tabs, because the design starts with none selected. |
 | **Drawer**                  | Vaul                                                                                         | Mobile versions of the popovers (bottom sheet)                                                    |
 
+All of the above are built and on `main` (M1 ✅).
+
+### 3b. Shared components for the flight booking flow
+
+**Owned by the bookings session.** It's planning these, see `docs/phase-2-bookings-plan.md` section 3. Chat **uses** them once they're merged to `main`, and doesn't build its own:
+
+- Dialog, AlertDialog, Switch, Tabs, Avatar, DropdownMenu
+- the **Bebas Neue** `--font-display` token
+- `MapPanel` (whichever session gets there first builds it in `shared/ui/`)
+
+**Built by this (chat) session** in `shared/ui/`, because bookings doesn't need them yet:
+
+| Component              | Built on                                                        | Used for                                     |
+| ---------------------- | --------------------------------------------------------------- | -------------------------------------------- |
+| **Sheet** (side panel) | Radix Dialog, sliding from the right; a bottom Drawer on phones | Flight details in checkout                   |
+| **Accordion**          | Radix Accordion                                                 | Passenger forms                              |
+| **Pagination**         | Plain links/buttons with `aria-current`                         | Results pages                                |
+| **Chip**               | span or button; removable variant with an "×" button            | Flight numbers, seats, travellers, amenities |
+| **ProgressSteps**      | An ordered list with `aria-current="step"`                      | Checkout progress bar                        |
+| **Spinner**            | SVG with `role="status"`                                        | Loading interstitials                        |
+
+If one of these turns out to be needed by bookings first, whoever needs it first builds it and tells the other session.
+
 ---
 
 ## 4. Milestones
 
 Each milestone ends with: stories for any new components; a11y checks passing; `pnpm lint`, `typecheck`, `test` and `build` green; and a visual check against the screenshots at desktop width and 375px.
 
-| #         | Milestone                                                                                                                                                                                                                                                                                                      | Done when                                                                             |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| **M0** ✅ | **Baseline:** commit phase 1 to `main`, then work on a branch                                                                                                                                                                                                                                                  | `git log` shows the baseline; the chat work is on `chat-ui`                           |
-| **M1** ✅ | **Shared components** (section 3). Built: Popover, Drawer, ResponsivePopover (popover on ≥640px, bottom sheet below), Select, Combobox, Stepper, ToggleGroup, Calendar, DateRangePicker                                                                                                                        | Each has stories, including keyboard behaviour tests for Combobox, Select and Stepper |
-| **M2**    | **Search bar:** ToggleGroup modes; Flights/Trains form (From ⇄ To, When, Passengers); Stays form (Where, When, Guests); passengers popover with child ages; Zod validation (e.g. each child needs an age, at least 1 adult, infants ≤ adults); swap button                                                     | Matches screens 2–7; fully usable by keyboard; validation errors are announced        |
-| **M3**    | **New chat page:** hero, search bar, prompt input, suggestions, assembled at `/chat`; suggestion cards fill the prompt                                                                                                                                                                                         | Matches screen 1                                                                      |
-| **M4**    | **Conversation:** mock services; `useChat`; `/chat/$chatId`; message list with the **structured summary bubble**, plain user bubbles and the assistant reply (streamed, markdown); "thinking" indicator; auto-scroll that stops when the user scrolls up; recent chats in the sidebar; title in the breadcrumb | Send → navigate → streamed reply works end to end on the mock                         |
-| **M5**    | **Map panel:** split layout; expand/collapse; zoom; markers from the conversation; lazy-loaded                                                                                                                                                                                                                 | Matches screens 8 and 10; the chat route stays light without the map                  |
-| **M6**    | **Sidebar icon rail:** collapse becomes an icon-only rail (design screen 9), with tooltips on icons and the same animation. This replaces the current "hide completely" behaviour.                                                                                                                             | Matches screen 9; keyboard and screen-reader names intact                             |
-| **M7**    | **States and polish:** stream error / rate limit / offline (Banner + retry); empty and loading states; the `review-animations` skill pass; one Playwright test of the whole flow on the mock                                                                                                                   | Error states visible in stories; the e2e test passes                                  |
+| #         | Milestone                                                                                                                                                                                                                                                                                                                                                                                                                     | Done when                                                                                      |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| **M0** ✅ | **Baseline:** commit phase 1 to `main`, then work on a branch                                                                                                                                                                                                                                                                                                                                                                 | `git log` shows the baseline; the chat work is on `chat-ui`                                    |
+| **M1** ✅ | **Shared components** (section 3). Built: Popover, Drawer, ResponsivePopover (popover on ≥640px, bottom sheet below), Select, Combobox, Stepper, ToggleGroup, Calendar, DateRangePicker                                                                                                                                                                                                                                       | Each has stories, including keyboard behaviour tests for Combobox, Select and Stepper          |
+| **M2**    | **Search bar:** ToggleGroup modes; Flights/Trains form (From ⇄ To, When, Passengers); Stays form (Where, When, Guests); passengers popover with child ages; Zod validation (e.g. each child needs an age, at least 1 adult, infants ≤ adults); swap button                                                                                                                                                                    | Matches screens 2–7; fully usable by keyboard; validation errors are announced                 |
+| **M3**    | **New chat page:** hero, search bar, prompt input, suggestions, assembled at `/chat`; suggestion cards fill the prompt                                                                                                                                                                                                                                                                                                        | Matches screen 1                                                                               |
+| **M4**    | **Conversation:** mock services; `useChat`; `/chat/$chatId`; message list with the **structured summary bubble** (time, edit, copy; screen 11), plain user bubbles and the assistant reply (streamed text, no bubble; 13); **ThinkingIndicator** (12, built ✅); **clarifying question card** replacing the input (14); auto-scroll that stops when the user scrolls up; recent chats in the sidebar; title in the breadcrumb | Send → navigate → thinking → streamed reply → clarifying question works end to end on the mock |
+| **M5**    | **Map panel:** split layout; expand/collapse; zoom; markers from the conversation; lazy-loaded                                                                                                                                                                                                                                                                                                                                | Matches screens 8 and 10; the chat route stays light without the map                           |
+| **M6**    | **Sidebar icon rail:** collapse becomes an icon-only rail (design screen 9), with tooltips on icons and the same animation. This replaces the current "hide completely" behaviour.                                                                                                                                                                                                                                            | Matches screen 9; keyboard and screen-reader names intact                                      |
+| **M7**    | **States and polish:** stream error / rate limit / offline (Banner + retry); empty and loading states; the `review-animations` skill pass; one Playwright test of the whole flow on the mock                                                                                                                                                                                                                                  | Error states visible in stories; the e2e test passes                                           |
 
-M1 has to come first. After it, M2 and M4 can run in parallel; M3 needs M2; M5 needs M4.
+**Flight booking milestones** (section 1b):
+
+| #       | Milestone                                                                                                                                                                                                                                                                      | Done when                                                            |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| **M8**  | **Flight results** (`features/flights`): FlightsService mock; round-trip card (in chat, 15); flight card with policy icon (16); filters, sort and pagination in the URL; full-width results view with Hide/Show search; return-flight step with the pinned departing card (19) | Matches 15, 16 and 19; filters and paging survive a refresh          |
+| **M9**  | **Fares and details:** fare options carousel (17); flight details dialog and side sheet with the segment timeline, layover and amenity chips (18, 22); out-of-policy reason dialog                                                                                             | Matches 17 and 18; carousel works with keyboard and swipe            |
+| **M10** | **Checkout shell + passengers:** checkout layout and ProgressSteps; loading interstitial (23); passenger accordion with Zod validation per passenger type; contact details; terms; Overview card with price change (20–22)                                                     | Proceed only enables when valid; errors are announced; matches 20–22 |
+| **M11** | **Extras and itinerary:** seats chips, loyalty dialog, baggage notes (24–25); itinerary timeline with upsell cards and price breakdown (26)                                                                                                                                    | Matches 24–26                                                        |
+| **M12** | **Payment results:** verifying → failed / successful (27–28), with retry. The payment form waits for a design.                                                                                                                                                                 | Both results reachable on the mock; Retry works                      |
+
+**Order:**
+
+- M1 has to come first.
+- After it, M2 and M4 can run in parallel; M3 needs M2; M5 needs M4.
+- M8 needs M4 (results appear in the conversation). M9 needs M8.
+- **M10–M12 (checkout) only need a booking to exist**, so they can run in parallel with M8–M9, in another session (section 7).
 
 ---
 
@@ -176,6 +294,16 @@ Other sections (bookings, expenses, …) may be built in other sessions at the s
    - `CLAUDE.md`, the docs, and the icons gallery story.
 5. **Don't duplicate shared components.** If a section needs something in section 3, use the chat branch's version once merged, or coordinate rather than building a second one.
 6. **Each section gets its own plan doc** (`docs/phase-2-<section>-plan.md`) so sessions don't edit the same plan file.
+7. **Screenshots aren't in git.** `uiscreenshot/` is ignored, so a session in a worktree reads the designs from `/Users/ifeoluwa/personal/travelOps/uiscreenshot/`.
+
+**Current sessions (2026-11-01):**
+
+| Session  | Folder                           | Branch        | Plan                            |
+| -------- | -------------------------------- | ------------- | ------------------------------- |
+| Chat     | `travelOps/`                     | `chat-ui`     | this file                       |
+| Bookings | `travelOps-bookings/` (worktree) | `bookings-ui` | `docs/phase-2-bookings-plan.md` |
+
+**A good split if another session is added:** **checkout (M10–M12)** is self-contained, with its own feature folder, layout and routes. It can be its own session (`checkout-ui`) once M1 and the bookings session's Dialog are on `main`.
 
 ---
 
@@ -183,9 +311,21 @@ Other sections (bookings, expenses, …) may be built in other sessions at the s
 
 1. **Map:** MapLibre GL + OpenFreeMap (no key).
 2. **Sidebar collapse:** switch to the design's **icon rail** (M6). This replaces "hide fully + logo in the header".
-3. **Assistant replies and result cards:** designs exist, in the flight booking part of the chat, still to be shared. Build M4's reply UI as a simple placeholder and restyle it when they arrive.
+3. **Assistant replies and result cards:** designed in `03-flight-booking/` (section 1b).
 4. **Date picker:** no design. Follow the existing patterns: popover on the search bar, our tokens, list and focus styles like the Select, two months on desktop, a bottom sheet with one month on mobile.
 5. **Cabin class:** not answered yet. Default to **Economy**, shown in the summary bubble only.
 6. **"Child 1 age" chip:** ignore for now.
 7. **Share chat / `···` menu:** later. Not built in this phase.
 8. **Mobile:** go with the proposal in section 6 for now.
+9. **Thinking animation:** the two stars drift and breathe out of step (1.8s), only while Sparky is thinking. With reduced motion it's an opacity pulse.
+10. **Illustrations:** the meditating traveller (`src/shared/illustrations/`) uses `currentColor` and theme variables, so it works in dark mode.
+
+## 9. Open questions (flight booking)
+
+1. **Display font:** the checkout headings look like **Bebas Neue**, which the bookings session also picked. Confirm it's the right font, and that the "TRAVELOPS" wordmark is an image (logo file) rather than text.
+2. **Missing designs:** the payment form, seat selection ("Edit seats"), the price breakdown, and the illustrations for payment failed (card reader) and success (trophy) as SVGs.
+3. **Policy:**
+   - Is "Issue a conditional offer" the action for an out-of-policy flight (e.g. request approval)? The first dialog with that title shows flight details, which looks like a copy-paste.
+   - What does the orange policy icon on a _fare_ mean?
+4. **Checkout buttons are fully rounded (pill)**, while the rest of the app uses 8px corners. Is that intended for checkout only? If yes, add a `rounded-full` shape to the Button.
+5. **Results in chat vs full width:** what switches between them, e.g. "See more flights" → full width?
