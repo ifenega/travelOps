@@ -79,7 +79,7 @@ The assistant is called **Sparky** ("Hello — I'm Sparky, your travel assistant
 
 **Not designed** (built on existing patterns, then adjusted when designs arrive):
 
-- **The payment form itself.** Only "verifying", "failed" and "successful" exist.
+- **The payment form isn't ours.** It's the **Paystack** widget (decision 11). We design only "verifying", "failed" and "successful".
 - **Seat selection** ("Edit seats") and the **price breakdown**.
 - **The illustrations** for payment failed (card reader) and success (trophy) aren't supplied as SVGs yet.
 - **The date range picker:** follows existing patterns (section 8).
@@ -154,7 +154,7 @@ src/features/checkout/     the full-page booking flow after a flight is chosen
 | `/checkout/$bookingId/passengers` | Screens 20–23. Checkout layout: no sidebar.                                                                                                                            |
 | `/checkout/$bookingId/extras`     | Seats, loyalty, baggage (24–25)                                                                                                                                        |
 | `/checkout/$bookingId/itinerary`  | Review (26)                                                                                                                                                            |
-| `/checkout/$bookingId/payment`    | Verifying → failed / successful (23, 27–28). The payment form is not designed.                                                                                         |
+| `/checkout/$bookingId/payment`    | Opens the Paystack widget, then verifying → failed / successful (23, 27–28).                                                                                           |
 
 - **Navigation:** submitting the search bar or the prompt creates a chat and navigates to `/chat/$chatId`. Choosing a fare creates a draft booking (mock) and opens checkout.
 - **URL state:** the results view's filters, sort and page live in the URL search params, validated by a Zod schema in the route. A refresh keeps them, and they're shareable.
@@ -215,7 +215,7 @@ Each milestone ends with: stories for any new components; a11y checks passing; `
 | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | **M0** ✅ | **Baseline:** commit phase 1 to `main`, then work on a branch                                                                                                                                                                                                                                                                                                                                                                 | `git log` shows the baseline; the chat work is on `chat-ui`                                    |
 | **M1** ✅ | **Shared components** (section 3). Built: Popover, Drawer, ResponsivePopover (popover on ≥640px, bottom sheet below), Select, Combobox, Stepper, ToggleGroup, Calendar, DateRangePicker                                                                                                                                                                                                                                       | Each has stories, including keyboard behaviour tests for Combobox, Select and Stepper          |
-| **M2**    | **Search bar:** ToggleGroup modes; Flights/Trains form (From ⇄ To, When, Passengers); Stays form (Where, When, Guests); passengers popover with child ages; Zod validation (e.g. each child needs an age, at least 1 adult, infants ≤ adults); swap button                                                                                                                                                                    | Matches screens 2–7; fully usable by keyboard; validation errors are announced                 |
+| **M2** ✅ | **Search bar:** ToggleGroup modes; Flights/Trains form (From ⇄ To, When, Passengers); Stays form (Where, When, Guests); passengers popover with child ages; Zod validation (e.g. each child needs an age, at least 1 adult, infants ≤ adults); swap button                                                                                                                                                                    | Matches screens 2–7; fully usable by keyboard; validation errors are announced                 |
 | **M3**    | **New chat page:** hero, search bar, prompt input, suggestions, assembled at `/chat`; suggestion cards fill the prompt                                                                                                                                                                                                                                                                                                        | Matches screen 1                                                                               |
 | **M4**    | **Conversation:** mock services; `useChat`; `/chat/$chatId`; message list with the **structured summary bubble** (time, edit, copy; screen 11), plain user bubbles and the assistant reply (streamed text, no bubble; 13); **ThinkingIndicator** (12, built ✅); **clarifying question card** replacing the input (14); auto-scroll that stops when the user scrolls up; recent chats in the sidebar; title in the breadcrumb | Send → navigate → thinking → streamed reply → clarifying question works end to end on the mock |
 | **M5**    | **Map panel:** split layout; expand/collapse; zoom; markers from the conversation; lazy-loaded                                                                                                                                                                                                                                                                                                                                | Matches screens 8 and 10; the chat route stays light without the map                           |
@@ -230,7 +230,7 @@ Each milestone ends with: stories for any new components; a11y checks passing; `
 | **M9**  | **Fares and details:** fare options carousel (17); flight details dialog and side sheet with the segment timeline, layover and amenity chips (18, 22); out-of-policy reason dialog                                                                                             | Matches 17 and 18; carousel works with keyboard and swipe            |
 | **M10** | **Checkout shell + passengers:** checkout layout and ProgressSteps; loading interstitial (23); passenger accordion with Zod validation per passenger type; contact details; terms; Overview card with price change (20–22)                                                     | Proceed only enables when valid; errors are announced; matches 20–22 |
 | **M11** | **Extras and itinerary:** seats chips, loyalty dialog, baggage notes (24–25); itinerary timeline with upsell cards and price breakdown (26)                                                                                                                                    | Matches 24–26                                                        |
-| **M12** | **Payment results:** verifying → failed / successful (27–28), with retry. The payment form waits for a design.                                                                                                                                                                 | Both results reachable on the mock; Retry works                      |
+| **M12** | **Payment:** "Continue to checkout" → `PaymentService.pay()` (mock now, Paystack popup later) → verifying → failed / successful (27–28), with retry.                                                                                                                           |                                                                      | Both results reachable on the mock; Retry works |
 
 **Order:**
 
@@ -319,11 +319,16 @@ Other sections (bookings, expenses, …) may be built in other sessions at the s
 8. **Mobile:** go with the proposal in section 6 for now.
 9. **Thinking animation:** the two stars drift and breathe out of step (1.8s), only while Sparky is thinking. With reduced motion it's an opacity pulse.
 10. **Illustrations:** the meditating traveller (`src/shared/illustrations/`) uses `currentColor` and theme variables, so it works in dark mode.
+11. **Payment is the Paystack widget** (Paystack's own popup), not a form we build.
+    - The backend starts each transaction and verifies it afterwards, so the real integration waits for the backend.
+    - This phase uses a `PaymentService` interface with a mock: `pay(bookingId)` resolves to success or failure on demand.
+    - Later, the real version opens Paystack's popup with the reference the backend returns, then calls the backend to verify. Screens don't change.
+    - **Never trust the popup's callback alone.** Only the backend's verification decides "successful".
 
 ## 9. Open questions (flight booking)
 
 1. **Display font:** the checkout headings look like **Bebas Neue**, which the bookings session also picked. Confirm it's the right font, and that the "TRAVELOPS" wordmark is an image (logo file) rather than text.
-2. **Missing designs:** the payment form, seat selection ("Edit seats"), the price breakdown, and the illustrations for payment failed (card reader) and success (trophy) as SVGs.
+2. **Missing designs:** seat selection ("Edit seats"), the price breakdown, and the illustrations for payment failed (card reader) and success (trophy) as SVGs. (Payment itself is the Paystack widget.)
 3. **Policy:**
    - Is "Issue a conditional offer" the action for an out-of-policy flight (e.g. request approval)? The first dialog with that title shows flight details, which looks like a copy-paste.
    - What does the orange policy icon on a _fare_ mean?
