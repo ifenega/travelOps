@@ -16,7 +16,8 @@ const styleUrl = "https://tiles.openfreemap.org/styles/liberty"
 export type MapPoint = { lng: number; lat: number; label: string }
 
 type MapPanelProps = {
-  /** Shown as dots, joined by a line in order. The map fits them all in view. */
+  /** Shown as dots, joined by a line in order. The map fits them all in view, or shows the
+   * whole world when there are none yet. */
   points: MapPoint[]
   /** Shows the expand button. The parent decides what "expanded" means for its layout. */
   expanded?: boolean
@@ -34,7 +35,7 @@ export function MapPanel({ points, expanded, onExpandedChange, className }: MapP
   useEffect(() => {
     const element = container.current
     const route: MapPoint[] = JSON.parse(pointsKey)
-    if (!element || route.length === 0) return
+    if (!element) return
     let cancelled = false
     let resizeObserver: ResizeObserver | undefined
 
@@ -54,14 +55,16 @@ export function MapPanel({ points, expanded, onExpandedChange, className }: MapP
       const instance = new maplibre.Map({
         container: element,
         style: styleUrl,
-        bounds,
-        fitBoundsOptions: { padding: 64, maxZoom: 11 },
+        ...(route.length > 0
+          ? { bounds, fitBoundsOptions: { padding: 64, maxZoom: 11 } }
+          : { center: [0, 20], zoom: 1 }),
         attributionControl: { compact: true },
       })
       map.current = instance
 
       const primary = getComputedStyle(element).getPropertyValue("--color-primary-600").trim()
       instance.on("load", () => {
+        if (route.length < 2) return
         instance.addSource("route", {
           type: "geojson",
           data: {
