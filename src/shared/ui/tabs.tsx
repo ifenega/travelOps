@@ -24,7 +24,8 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
       data-slot="tabs-trigger"
       className={cn(
         "inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-muted-foreground text-sm pointer-coarse:min-h-11",
-        "transition-colors duration-150 hover:text-foreground",
+        // No transition: tabs switch with the arrow keys, and keyboard actions never animate.
+        "hover:text-foreground",
         "data-[state=active]:bg-foreground/5 data-[state=active]:text-foreground",
         "focus-visible:outline-2 focus-visible:outline-ring focus-visible:-outline-offset-2",
         "[&_svg]:size-4 [&_svg]:shrink-0",

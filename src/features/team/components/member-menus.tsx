@@ -104,7 +104,7 @@ export function RoleMenu({ member, roles, onAction }: MenuProps) {
           ref={button}
           type="button"
           aria-label={`Role for ${fullName(member)}: ${current?.name ?? "none"}`}
-          className="-ml-2 inline-flex items-center gap-1 rounded-md px-2 py-1 hover:bg-foreground/5 focus-visible:outline-2 focus-visible:outline-ring pointer-coarse:min-h-11"
+          className="-ml-2 inline-flex items-center gap-1 rounded-md px-2 py-1 hover:bg-foreground/5 focus-visible:outline-2 focus-visible:outline-ring pointer-coarse:min-h-11 transition-transform duration-150 ease-out active:scale-[0.97] motion-reduce:active:scale-100"
         >
           {current?.name ?? "No role"}
           <ChevronDown aria-hidden="true" className="size-4 text-muted-foreground" />

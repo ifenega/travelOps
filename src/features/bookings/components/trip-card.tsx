@@ -28,7 +28,7 @@ export function TripCard({ trip, onShare, onDelete }: TripCardProps) {
   const menuButton = useRef<HTMLButtonElement>(null)
 
   return (
-    <article className="relative flex flex-col overflow-hidden rounded-xl border bg-card text-card-foreground shadow-xs hover:border-gray-300 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-ring has-[a:focus-visible]:outline-offset-2 dark:hover:border-gray-700">
+    <article className="relative flex flex-col overflow-hidden rounded-xl border bg-card text-card-foreground shadow-xs transition-transform duration-150 ease-out has-[a:active]:scale-[0.99] motion-reduce:has-[a:active]:scale-100 hover:border-gray-300 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-ring has-[a:focus-visible]:outline-offset-2 dark:hover:border-gray-700">
       <TripPhoto src={trip.imageUrl} className="aspect-5/4" />
 
       <div className="flex flex-col gap-1 p-3">

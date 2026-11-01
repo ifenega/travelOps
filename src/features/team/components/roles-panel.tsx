@@ -222,7 +222,7 @@ function RoleStatusMenu({
           ref={button}
           type="button"
           aria-label={`Status of ${role.name}: Active`}
-          className="inline-flex items-center gap-0.5 rounded-md bg-success-100 px-2 py-0.5 text-success-700 text-xs hover:bg-success-200 focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 pointer-coarse:min-h-8 dark:bg-success-600/20 dark:text-success-300"
+          className="inline-flex items-center gap-0.5 rounded-md bg-success-100 px-2 py-0.5 text-success-700 text-xs hover:bg-success-200 focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 pointer-coarse:min-h-8 dark:bg-success-600/20 dark:text-success-300 transition-transform duration-150 ease-out active:scale-[0.97] motion-reduce:active:scale-100"
         >
           Active
           <ChevronDown aria-hidden="true" className="size-3.5" />

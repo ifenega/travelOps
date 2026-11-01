@@ -133,7 +133,7 @@ export function RecipientPicker({ members, selected, onChange }: RecipientPicker
         {...getMenuProps()}
         className={cn(
           popoverSurfaceClassName,
-          "mt-1 max-h-60 overflow-y-auto overscroll-contain p-1",
+          "mt-1 max-h-60 origin-top overflow-y-auto overscroll-contain p-1",
           isOpen ? "animate-popover-in" : "hidden",
         )}
       >

@@ -74,6 +74,7 @@ export function Pagination({
                   aria-current={n === page ? "page" : undefined}
                   className={cn(
                     "size-8 rounded-full text-muted-foreground tabular-nums hover:bg-foreground/5 hover:text-foreground",
+                    "transition-transform duration-150 ease-out active:scale-[0.97] motion-reduce:active:scale-100",
                     "focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2",
                     "aria-[current=page]:bg-foreground/10 aria-[current=page]:font-medium aria-[current=page]:text-foreground",
                   )}
