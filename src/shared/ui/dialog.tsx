@@ -44,6 +44,16 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         onCloseAutoFocus={onCloseAutoFocus}
+        // Esc in an open autocomplete closes just its list, not the whole dialog. The next Esc
+        // closes the dialog. (Radix Select handles this itself; Downshift lists need it.)
+        onEscapeKeyDown={(event) => {
+          if (
+            event.target instanceof Element &&
+            event.target.getAttribute("aria-expanded") === "true"
+          ) {
+            event.preventDefault()
+          }
+        }}
         // Radix links the description itself; without one, opt out so it doesn't warn.
         {...(!description && { "aria-describedby": undefined })}
         className={cn(
