@@ -17,6 +17,7 @@ import {
   tripSearchDefaults,
   tripSearchSchema,
 } from "@/features/bookings"
+import { TeamPage, teamSearchDefaults, teamSearchSchema } from "@/features/team"
 import { type FlagName, isEnabled } from "@/shared/flags/flags"
 import { DashboardLayout } from "./layout/dashboard-layout"
 import { ErrorPage, RootErrorPage } from "./pages/error-page"
@@ -111,7 +112,10 @@ const reportsRoute = createRoute({
 const membersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/members",
-  component: () => <PlaceholderPage title="Invite members" />,
+  beforeLoad: requireFlag("team"),
+  validateSearch: teamSearchSchema,
+  search: { middlewares: [stripSearchParams(teamSearchDefaults)] },
+  component: TeamPage,
 })
 
 const supportRoute = createRoute({

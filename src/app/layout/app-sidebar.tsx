@@ -73,9 +73,11 @@ export function AppSidebar() {
 
         <div className="mt-auto">
           <SidebarSection label="Try">
-            <SidebarLink to="/members" icon={Plus}>
-              Invite members
-            </SidebarLink>
+            <Feature flag="team">
+              <SidebarLink to="/members" icon={Plus}>
+                Invite members
+              </SidebarLink>
+            </Feature>
             <SidebarLink to="/support" icon={MessageQuestionCircle}>
               Chat with support
             </SidebarLink>

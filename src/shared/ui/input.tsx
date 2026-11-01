@@ -13,6 +13,8 @@ function Input({ className, ...props }: React.ComponentProps<"input">) {
         "focus:border-primary-500 focus:ring-4 focus:ring-primary-600/15",
         "aria-invalid:border-error-500 aria-invalid:focus:ring-error-600/15",
         "disabled:cursor-not-allowed disabled:opacity-50",
+        // Read-only fields (e.g. an email that can't change) look settled but stay readable.
+        "read-only:bg-muted read-only:text-muted-foreground",
         className,
       )}
       {...props}

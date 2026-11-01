@@ -1,5 +1,6 @@
 import { Switch as SwitchPrimitive } from "radix-ui"
 import type * as React from "react"
+import { useId } from "react"
 import { cn } from "@/shared/lib/utils"
 
 // Based on shadcn/ui's Switch, restyled to the Figma (e.g. "Get a link" in Share trip).
@@ -24,4 +25,46 @@ function Switch({ className, ...props }: React.ComponentProps<typeof SwitchPrimi
   )
 }
 
-export { Switch }
+/**
+ * A setting from the Figma's dialogs: label and help text on the left, the switch on the right.
+ * The label names the switch and the help text describes it, for screen readers.
+ */
+function SwitchField({
+  label,
+  description,
+  checked,
+  onCheckedChange,
+  disabled,
+}: {
+  label: string
+  description?: React.ReactNode
+  checked: boolean
+  onCheckedChange: (checked: boolean) => void
+  disabled?: boolean
+}) {
+  const id = useId()
+  return (
+    <div className="flex items-start justify-between gap-6">
+      <div className="text-sm">
+        <p id={`${id}-label`} className="font-medium">
+          {label}
+        </p>
+        {description && (
+          <p id={`${id}-description`} className="text-muted-foreground">
+            {description}
+          </p>
+        )}
+      </div>
+      <Switch
+        checked={checked}
+        onCheckedChange={onCheckedChange}
+        disabled={disabled}
+        aria-labelledby={`${id}-label`}
+        aria-describedby={description ? `${id}-description` : undefined}
+        className="mt-0.5"
+      />
+    </div>
+  )
+}
+
+export { Switch, SwitchField }

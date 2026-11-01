@@ -1,9 +1,9 @@
 import { Plane, Train } from "@untitledui/icons"
-import { useId, useState } from "react"
+import { useState } from "react"
 import { Button } from "@/shared/ui/button"
 import { Dialog, DialogContent } from "@/shared/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/shared/ui/select"
-import { Switch } from "@/shared/ui/switch"
+import { SwitchField } from "@/shared/ui/switch"
 import { toast } from "@/shared/ui/toast"
 import {
   useSetShareLinkEnabled,
@@ -64,43 +64,6 @@ function ShareTripForm({ initialTrip, trips }: { initialTrip: Trip; trips: Trip[
   )
 }
 
-/** A setting with its label and help text on the left and a switch on the right. */
-function SwitchRow({
-  label,
-  help,
-  checked,
-  onCheckedChange,
-  disabled,
-}: {
-  label: string
-  help: string
-  checked: boolean
-  onCheckedChange: (checked: boolean) => void
-  disabled?: boolean
-}) {
-  const id = useId()
-  return (
-    <div className="flex items-start justify-between gap-6">
-      <div className="text-sm">
-        <p id={`${id}-label`} className="font-medium">
-          {label}
-        </p>
-        <p id={`${id}-help`} className="text-muted-foreground">
-          {help}
-        </p>
-      </div>
-      <Switch
-        checked={checked}
-        onCheckedChange={onCheckedChange}
-        disabled={disabled}
-        aria-labelledby={`${id}-label`}
-        aria-describedby={`${id}-help`}
-        className="mt-0.5"
-      />
-    </div>
-  )
-}
-
 function LinkSharing({
   trip,
   trips,
@@ -126,9 +89,9 @@ function LinkSharing({
 
   return (
     <section className="flex flex-col gap-3">
-      <SwitchRow
+      <SwitchField
         label="Get a link"
-        help="Share trip dates and services, but hide traveller names and prices."
+        description="Share trip dates and services, but hide traveller names and prices."
         checked={enabled}
         onCheckedChange={(on) => setEnabled.mutate(on)}
         disabled={link.isPending || setEnabled.isPending}
@@ -199,9 +162,9 @@ function EmailSharing({ trip }: { trip: Trip }) {
 
   return (
     <section className="flex flex-col gap-3">
-      <SwitchRow
+      <SwitchField
         label="Send via email"
-        help="Share the full trip details and travellers. We won't send any prices, confirmation numbers, or tickets."
+        description="Share the full trip details and travellers. We won't send any prices, confirmation numbers, or tickets."
         checked={enabled}
         onCheckedChange={setEnabled}
       />

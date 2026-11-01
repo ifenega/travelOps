@@ -23,6 +23,8 @@ export const flags = {
   wallet: flag(env.VITE_FLAG_WALLET, true),
   policies: flag(env.VITE_FLAG_POLICIES, true),
   reports: flag(env.VITE_FLAG_REPORTS, true),
+  /** Team members and roles (the sidebar's "Invite members"). */
+  team: flag(env.VITE_FLAG_TEAM, true),
 }
 
 export type FlagName = keyof typeof flags

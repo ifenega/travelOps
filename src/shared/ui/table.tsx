@@ -39,7 +39,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
   return (
     <th
       className={cn(
-        "h-10 whitespace-nowrap px-3 text-left align-middle font-medium text-muted-foreground text-xs uppercase tracking-wide",
+        "h-10 whitespace-nowrap px-3 text-left align-middle font-normal text-muted-foreground text-sm",
         className,
       )}
       {...props}
@@ -80,7 +80,7 @@ function TableSortHead({
       <button
         type="button"
         onClick={onSort}
-        className="-mx-1 inline-flex items-center gap-1 rounded-sm px-1 uppercase hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
+        className="-mx-1 inline-flex items-center gap-1 rounded-sm px-1 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
       >
         {children}
         <Icon aria-hidden="true" className="size-3.5" />

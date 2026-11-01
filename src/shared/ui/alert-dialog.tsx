@@ -1,4 +1,6 @@
 import { AlertDialog as AlertDialogPrimitive } from "radix-ui"
+import type * as React from "react"
+import { AlertCircleSolid } from "@/shared/icons/status-icons"
 import { cn } from "@/shared/lib/utils"
 import { Button } from "./button"
 
@@ -21,7 +23,8 @@ const AlertDialog = AlertDialogPrimitive.Root
 
 type AlertDialogContentProps = {
   title: string
-  description: string
+  /** Can hold emphasis, e.g. the name of the person being deleted. */
+  description: React.ReactNode
   confirmLabel: string
   onConfirm: () => void
   /** "destructive" makes the confirm button red. */
@@ -51,10 +54,12 @@ function AlertDialogContent({
           className,
         )}
       >
-        <AlertDialogPrimitive.Title className="font-medium text-lg">
+        <AlertDialogPrimitive.Title className="flex items-center gap-2 font-medium text-lg">
+          {/* The Figma's orange "!" before the title. The title says the rest in words. */}
+          <AlertCircleSolid aria-hidden="true" size={20} className="shrink-0 text-warning-600" />
           {title}
         </AlertDialogPrimitive.Title>
-        <AlertDialogPrimitive.Description className="mt-1 text-muted-foreground text-sm">
+        <AlertDialogPrimitive.Description className="mt-3 text-muted-foreground text-sm">
           {description}
         </AlertDialogPrimitive.Description>
         <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">

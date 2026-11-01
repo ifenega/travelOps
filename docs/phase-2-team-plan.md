@@ -120,7 +120,9 @@ src/features/team/
 
 Feature-local until a second feature needs them: **EmailChipsInput** (free-typed emails; bookings' RecipientPicker picks from a list instead), **FileDrop / ImportProgress** (with a progress ring), and **PermissionsGrid**.
 
-The **Country** field uses the shared Combobox, over a country list built with `Intl.DisplayNames`, so no country list has to be maintained.
+The **Country** field is a Select (typing a letter jumps to it), over names built with `Intl.DisplayNames` from a list of country codes, so no country names have to be maintained.
+
+Moved to `shared/` during the build, because bookings needs them too: **SearchInput** (search with a ⓧ clear button; the bookings list uses it now) and **SwitchField** (a labelled switch row; bookings' Share trip uses it now). The shared **AlertDialog** gained the design's orange "!" and a rich description, and **Input** a read-only style.
 
 ---
 
@@ -155,7 +157,7 @@ The **Country** field uses the shared Combobox, over a country list built with `
 
 All forms use React Hook Form + Zod (CLAUDE.md), with `mode: "onTouched"` and `<Field>`:
 
-- **Invite:** `emails` (1+ valid, deduplicated, not already members), `policyId`, `roleId`, `message` (optional, ≤ 500 characters).
+- **Invite:** `emails` (1+ valid, deduplicated, not already members; checked on Send, not on blur, because an error appearing on blur pushes the Send button away mid-click), `policyId`, `roleId`, `message` (optional, ≤ 500 characters).
 - **Edit member:** first and last name (required), policy, phone (optional, digits, spaces, + and dashes), gender (optional: Female, Male, Prefer not to say), country.
 - **Role:** name (required, unique), description (optional), permissions (at least one Read).
 - **Export:** format (required), dates (From ≤ To), email (required when Send via email is on).
@@ -179,12 +181,12 @@ Each milestone ends with: stories for new components; a11y checks passing; `pnpm
 | #         | Milestone                                                                                                                                                           | Done when                                                        |
 | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | **M0** ✅ | **Baseline:** `team-ui` worktree from `main`                                                                                                                        | `git worktree list` shows `travelOps-team`                       |
-| **M1**    | **Shared:** Pagination, Textarea, DatePicker, Table header restyle                                                                                                  | Stories, with a keyboard test for Pagination                     |
-| **M2**    | **Data:** types and Zod schemas, mock service (members, roles, policies, import job, export), query hooks, `emails.ts` / `paginate.ts` / `csv.ts` with unit tests   | Unit tests pass                                                  |
-| **M3**    | **Members tab:** tabs with counts, search with clear, sort, pagination, role dropdown with confirm, policy badges, `···` menu, states, stacked rows on phones       | Matches screens 1–3 and 7                                        |
-| **M4**    | **Member dialogs:** Add members (email chips), Edit member, Delete member, Resend invite, with toasts                                                               | Matches screens 4–6; every form usable by keyboard and VoiceOver |
-| **M5**    | **Roles tab:** table, status menu, Create/Edit role with the permissions grid, Delete role                                                                          | Matches screens 8–11                                             |
-| **M6**    | **Manage data:** Import (checks, template, progress, cancel, finished toast, menu greyed out while running) and Export (dates, format, email, copy to me, download) | Matches screens 12–15                                            |
+| **M1** ✅ | **Shared:** Pagination, Textarea, DatePicker, Table header restyle                                                                                                  | Stories, with a keyboard test for Pagination                     |
+| **M2** ✅ | **Data:** types and Zod schemas, mock service (members, roles, policies, import job, export), query hooks, `emails.ts` / `paginate.ts` / `csv.ts` with unit tests   | Unit tests pass                                                  |
+| **M3** ✅ | **Members tab:** tabs with counts, search with clear, sort, pagination, role dropdown with confirm, policy badges, `···` menu, states, stacked rows on phones       | Matches screens 1–3 and 7                                        |
+| **M4** ✅ | **Member dialogs:** Add members (email chips), Edit member, Delete member, Resend invite, with toasts                                                               | Matches screens 4–6; every form usable by keyboard and VoiceOver |
+| **M5** ✅ | **Roles tab:** table, status menu, Create/Edit role with the permissions grid, Delete role                                                                          | Matches screens 8–11                                             |
+| **M6** ✅ | **Manage data:** Import (checks, template, progress, cancel, finished toast, menu greyed out while running) and Export (dates, format, email, copy to me, download) | Matches screens 12–15                                            |
 | **M7**    | **Polish:** the `review-animations` pass, real-iPhone check, page-level stories for the whole flow                                                                  | Checked on an iPhone                                             |
 
 M1 comes first. M3 and M5 can go side by side after M2; M4 needs M3; M6 needs M2 and M3.

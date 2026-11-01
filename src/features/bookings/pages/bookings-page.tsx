@@ -1,9 +1,10 @@
 import { Link, useNavigate, useSearch } from "@tanstack/react-router"
-import { SearchLg, Stars02 } from "@untitledui/icons"
-import { useEffect, useRef, useState } from "react"
+import { Stars02 } from "@untitledui/icons"
+import { useState } from "react"
 import { Banner } from "@/shared/ui/banner"
 import { Button } from "@/shared/ui/button"
 import { Page } from "@/shared/ui/page"
+import { SearchInput } from "@/shared/ui/search-input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
 import { ToggleGroup, ToggleGroupItem } from "@/shared/ui/toggle-group"
@@ -76,7 +77,8 @@ export function BookingsPage() {
                 })}
               </TabsList>
               <div className="flex w-full items-center gap-2 sm:w-auto">
-                <TripSearch
+                <SearchInput
+                  label="Search trips"
                   value={search.q ?? ""}
                   onChange={(q) => update({ q: q || undefined }, { replace: true })}
                 />
@@ -157,40 +159,6 @@ export function BookingsPage() {
         </p>
       </div>
     </Page>
-  )
-}
-
-/** Search as you type. The URL updates once typing pauses, so history isn't flooded. */
-function TripSearch({ value, onChange }: { value: string; onChange: (value: string) => void }) {
-  const [text, setText] = useState(value)
-  // Refs, so the timer below restarts only when the user types, not when the URL catches up.
-  const latest = useRef({ value, onChange })
-  latest.current = { value, onChange }
-
-  // When the URL changes from elsewhere (Clear filters, Back), show its value.
-  useEffect(() => setText(value), [value])
-
-  useEffect(() => {
-    if (text === latest.current.value) return
-    const timer = setTimeout(() => latest.current.onChange(text), 250)
-    return () => clearTimeout(timer)
-  }, [text])
-
-  return (
-    <label className="relative flex min-w-0 flex-1 items-center sm:w-48 sm:flex-none">
-      <SearchLg
-        aria-hidden="true"
-        className="pointer-events-none absolute left-2.5 size-4 text-muted-foreground"
-      />
-      <input
-        type="search"
-        aria-label="Search trips"
-        placeholder="Search"
-        value={text}
-        onChange={(event) => setText(event.target.value)}
-        className="h-9 w-full min-w-0 rounded-lg bg-transparent pr-2 pl-8 text-base outline-none transition-colors duration-150 placeholder:text-muted-foreground hover:bg-foreground/5 focus:bg-foreground/5 focus-visible:outline-2 focus-visible:outline-ring pointer-coarse:h-11 md:text-sm"
-      />
-    </label>
   )
 }
 
