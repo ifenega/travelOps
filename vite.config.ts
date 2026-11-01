@@ -24,6 +24,11 @@ export default defineConfig({
   test: {
     projects: [
       {
+        // Plain unit tests for real logic (e.g. features/*/utils). Files end in .test.ts.
+        extends: true,
+        test: { name: "unit", include: ["src/**/*.test.ts"], environment: "node" },
+      },
+      {
         // Every story runs as a test in a real (headless) Chromium, including a11y checks.
         // https://storybook.js.org/docs/writing-tests/integrations/vitest-addon
         extends: true,
