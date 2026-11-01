@@ -6,7 +6,7 @@ import {
   type RouterHistory,
   redirect,
 } from "@tanstack/react-router"
-import { Stars02 } from "@untitledui/icons"
+import { ConversationPage, chatExists, NewChatPage } from "@/features/chat"
 import { type FlagName, isEnabled } from "@/shared/flags/flags"
 import { DashboardLayout } from "./layout/dashboard-layout"
 import { ErrorPage, RootErrorPage } from "./pages/error-page"
@@ -39,12 +39,19 @@ const indexRoute = createRoute({
 const chatRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/chat",
-  component: () => (
-    <PlaceholderPage
-      title="New chat"
-      breadcrumbs={[{ label: "Chats", to: "/chat", icon: Stars02 }, { label: "New chat" }]}
-    />
-  ),
+  component: NewChatPage,
+})
+
+const conversationRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/chat/$chatId",
+  beforeLoad: ({ params }) => {
+    if (!chatExists(params.chatId)) throw notFound()
+  },
+  component: function Conversation() {
+    const { chatId } = conversationRoute.useParams()
+    return <ConversationPage chatId={chatId} />
+  },
 })
 
 const bookingsRoute = createRoute({
@@ -103,6 +110,7 @@ const accountRoute = createRoute({
 export const routeTree = rootRoute.addChildren([
   indexRoute,
   chatRoute,
+  conversationRoute,
   bookingsRoute,
   expensesRoute,
   walletRoute,

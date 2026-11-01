@@ -21,6 +21,31 @@
     color-scheme: dark;
   }
 
+  /*
+   * Subtle scrollbars everywhere: thin and faint, in light and dark. (Systems set to always show
+   * scrollbars otherwise get thick grey bars, e.g. in the sidebar.) The ::-webkit rules cover
+   * browsers that don't support the standard properties yet.
+   */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--foreground) 20%, transparent) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 9999px;
+    background: color-mix(in oklab, var(--foreground) 20%, transparent) content-box;
+  }
+
   /* Headings and <main> get focus after navigation (for screen readers); no ring needed there. */
   [tabindex="-1"]:focus {
     outline: none;

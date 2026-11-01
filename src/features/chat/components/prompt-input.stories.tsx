@@ -46,6 +46,23 @@ export const Sending: Story = {
   },
 }
 
+/** Behaviour: ↑ / ↓ step through earlier prompts; past the newest, the draft comes back. */
+export const History: Story = {
+  args: { history: ["Flights to Athens in May", "Hotels near the Acropolis"] },
+  play: async ({ canvas, userEvent }) => {
+    const input = canvas.getByRole("textbox", { name: "Message" })
+    await userEvent.type(input, "draft")
+    await userEvent.keyboard("{ArrowUp}")
+    await expect(input).toHaveValue("Hotels near the Acropolis")
+    await userEvent.keyboard("{ArrowUp}")
+    await expect(input).toHaveValue("Flights to Athens in May")
+    await userEvent.keyboard("{ArrowUp}") // already the oldest: stays
+    await expect(input).toHaveValue("Flights to Athens in May")
+    await userEvent.keyboard("{ArrowDown}{ArrowDown}")
+    await expect(input).toHaveValue("draft")
+  },
+}
+
 /** Long messages grow the box up to a limit, then scroll inside it. */
 export const LongMessage: Story = {
   play: async ({ canvas, userEvent }) => {

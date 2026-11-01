@@ -21,6 +21,8 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  // Web workers are ES modules (MapLibre's map worker is one).
+  worker: { format: "es" },
   test: {
     projects: [
       {

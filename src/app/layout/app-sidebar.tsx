@@ -12,21 +12,32 @@ import {
   User01,
   Wallet02,
 } from "@untitledui/icons"
+import { useChats } from "@/features/chat"
 import { Feature } from "@/shared/flags/feature"
+import { cn } from "@/shared/lib/utils"
 import { Button } from "@/shared/ui/button"
 import { Logo } from "@/shared/ui/logo"
-import { SidebarCloseButton, SidebarLink, SidebarSection } from "@/shared/ui/sidebar"
+import {
+  SidebarLink,
+  SidebarSection,
+  SidebarToggleButton,
+  useSidebarRail,
+} from "@/shared/ui/sidebar"
 import { ThemeToggle } from "./theme-toggle"
 
 // The TravelOps sidebar contents, from the Figma. Flagged items disappear when their flag is off
-// (their routes show the 404 page too, see routes.tsx).
+// (their routes show the 404 page too, see routes.tsx). Collapsed on desktop, it's an icon rail.
 export function AppSidebar() {
+  const rail = useSidebarRail()
+
   return (
     // The logo row and the account row stay put; only the nav scrolls on short screens.
-    <div className="flex h-full flex-col gap-4 p-3">
-      <div className="flex shrink-0 items-center justify-between">
-        <Logo className="px-1" />
-        <SidebarCloseButton />
+    <div className="flex h-full flex-col gap-4 px-2 py-3 lg:px-3">
+      <div
+        className={cn("flex shrink-0 items-center", rail ? "justify-center" : "justify-between")}
+      >
+        {!rail && <Logo className="px-1" />}
+        <SidebarToggleButton />
       </div>
 
       <nav
@@ -67,9 +78,7 @@ export function AppSidebar() {
           </Feature>
         </SidebarSection>
 
-        <SidebarSection label="Recent chats">
-          <p className="px-2 text-muted-foreground text-sm">Your recent chats will appear here.</p>
-        </SidebarSection>
+        <SidebarSection label="Recent chats">{!rail && <RecentChats />}</SidebarSection>
 
         <div className="mt-auto">
           <SidebarSection label="Try">
@@ -86,7 +95,12 @@ export function AppSidebar() {
         </div>
       </nav>
 
-      <div className="flex shrink-0 items-center justify-between">
+      <div
+        className={cn(
+          "flex shrink-0 items-center",
+          rail ? "flex-col-reverse gap-2" : "justify-between",
+        )}
+      >
         {/* Placeholder avatar until real user data exists. */}
         <Link
           to="/account"
@@ -95,7 +109,7 @@ export function AppSidebar() {
         >
           <User01 className="size-4" />
         </Link>
-        <div className="flex items-center">
+        <div className={cn("flex items-center", rail && "flex-col")}>
           <Feature flag="darkMode">
             <ThemeToggle />
           </Feature>
@@ -107,5 +121,23 @@ export function AppSidebar() {
         </div>
       </div>
     </div>
+  )
+}
+
+function RecentChats() {
+  const chats = useChats().slice(0, 8)
+  if (chats.length === 0) {
+    return <p className="px-2 text-muted-foreground text-sm">Your recent chats will appear here.</p>
+  }
+  return (
+    <ul className="flex flex-col gap-0.5">
+      {chats.map((chat) => (
+        <li key={chat.id}>
+          <SidebarLink to="/chat/$chatId" params={{ chatId: chat.id }}>
+            {chat.title}
+          </SidebarLink>
+        </li>
+      ))}
+    </ul>
   )
 }

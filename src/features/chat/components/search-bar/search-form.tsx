@@ -62,7 +62,7 @@ export function SearchForm({ mode, values, onChange, onSearch }: SearchFormProps
 
   return (
     <form onSubmit={submit} noValidate aria-label={`Search ${mode}`} className="w-full">
-      <div className="flex flex-col rounded-xl border bg-background shadow-xs md:flex-row md:items-stretch md:p-1">
+      <div className="flex flex-col rounded-xl border bg-background shadow-xs dark:bg-gray-900 md:flex-row md:items-stretch md:p-1">
         {mode === "stays" ? (
           <PlaceField
             {...fieldProps("destination")}
@@ -89,7 +89,7 @@ export function SearchForm({ mode, values, onChange, onSearch }: SearchFormProps
                 size="icon"
                 aria-label="Swap from and to"
                 onClick={swap}
-                className="absolute top-1/2 right-3 -translate-y-1/2 bg-background md:right-auto md:left-1/2 md:-translate-x-1/2"
+                className="absolute top-1/2 right-3 -translate-y-1/2 bg-background dark:bg-gray-900 md:right-auto md:left-1/2 md:-translate-x-1/2"
               >
                 <SwitchHorizontal01 className="max-md:rotate-90" />
               </Button>

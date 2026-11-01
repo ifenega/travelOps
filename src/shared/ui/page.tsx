@@ -22,15 +22,49 @@ type PageProps = {
   breadcrumbs?: Breadcrumb[]
   /** Buttons on the right of the header, e.g. "Share chat". */
   actions?: ReactNode
+  /** A full-height panel to the right of the page, e.g. the chat's map. */
+  aside?: ReactNode
+  /** Hides the page's own column so `aside` fills the width (the expanded map). */
+  asideOnly?: boolean
   children: ReactNode
 }
 
-export function Page({ title, breadcrumbs = [{ label: title }], actions, children }: PageProps) {
+export function Page({
+  title,
+  breadcrumbs = [{ label: title }],
+  actions,
+  aside,
+  asideOnly = false,
+  children,
+}: PageProps) {
   const online = useOnlineStatus()
 
   return (
-    <>
+    <div className="flex min-h-0 flex-1">
       <title>{`${title} · TravelOps`}</title>
+      <div className={cn("flex min-w-0 flex-1 flex-col", asideOnly && "hidden")}>
+        <PageColumn breadcrumbs={breadcrumbs} actions={actions} online={online}>
+          {children}
+        </PageColumn>
+      </div>
+      {aside}
+    </div>
+  )
+}
+
+function PageColumn({
+  breadcrumbs,
+  actions,
+  online,
+  children,
+}: {
+  breadcrumbs: Breadcrumb[]
+  actions?: ReactNode
+  online: boolean
+  children: ReactNode
+}) {
+  return (
+    <>
       <header className="shrink-0 border-b pt-[env(safe-area-inset-top)]">
         <div className="flex h-12 items-center gap-2 px-4">
           <SidebarCollapsedHeader />
