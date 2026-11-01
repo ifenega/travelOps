@@ -112,6 +112,8 @@
 
   /* Tooltips and small popovers: fade + grow from 0.97. Reduced motion drops the scale (globals.css). */
   --animate-pop-in: pop-in 125ms var(--ease-out);
+  /* Popovers, selects and dropdowns: same motion, a little longer. */
+  --animate-popover-in: pop-in 200ms var(--ease-out);
 
   @keyframes pop-in {
     from {
