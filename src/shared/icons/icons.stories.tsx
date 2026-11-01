@@ -47,6 +47,7 @@ import {
 } from "@untitledui/icons"
 import { type ComponentType, useState } from "react"
 import { AlertCircleSolid, CheckCircleSolid } from "./status-icons"
+import AiSparkle from "./svg/ai-sparkle.svg?react"
 import CaretDown from "./svg/caret-down.svg?react"
 
 /*
@@ -59,6 +60,7 @@ import CaretDown from "./svg/caret-down.svg?react"
  * (The Untitled UI licence doesn't allow redistributing the full set, so don't publish a full catalogue.)
  */
 const icons: Record<string, ComponentType<{ className?: string }>> = {
+  AiSparkle,
   AlertCircle,
   AlertCircleSolid,
   AlertTriangle,
