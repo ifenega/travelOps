@@ -55,7 +55,7 @@ export const SearchingFlights: Story = {
     // From / To: type, then pick the airport (the city of the same name is listed first).
     await userEvent.type(canvas.getByRole("combobox", { name: "From" }), "Lagos")
     await userEvent.click(await canvas.findByRole("option", { name: /Murtala Muhammed/ }))
-    await userEvent.type(canvas.getByRole("combobox", { name: "To" }), "Athens")
+    await userEvent.type(await canvas.findByRole("combobox", { name: "To" }), "Athens")
     await userEvent.click(await canvas.findByRole("option", { name: /Eleftherios Venizelos/ }))
 
     // Swap, then swap back.
@@ -72,12 +72,15 @@ export const SearchingFlights: Story = {
     await userEvent.click(dates.getAllByRole("button", { name: /\b10th\b/ })[0])
     await userEvent.click(dates.getAllByRole("button", { name: /\b15th\b/ })[0])
     await userEvent.click(dates.getByRole("button", { name: "Done" }))
+    // While a popover is open the page behind it is hidden from screen readers, so wait for it.
+    await waitFor(() => expect(page.queryByRole("dialog")).toBeNull())
 
     // Passengers: add a child but don't give an age yet.
     await userEvent.click(canvas.getByRole("button", { name: /^Passengers/ }))
     const passengers = within(await page.findByRole("dialog", { name: "Passengers" }))
     await userEvent.click(passengers.getByRole("button", { name: "Add child" }))
     await userEvent.keyboard("{Escape}")
+    await waitFor(() => expect(page.queryByRole("dialog")).toBeNull())
 
     await userEvent.click(canvas.getByRole("button", { name: "Search flights" }))
     await expect(await canvas.findByRole("alert")).toHaveTextContent("Choose an age for each child")

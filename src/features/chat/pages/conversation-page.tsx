@@ -1,9 +1,9 @@
 import { Map01, Stars02 } from "@untitledui/icons"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useState } from "react"
 import { cn } from "@/shared/lib/utils"
 import { Button } from "@/shared/ui/button"
 import { Drawer, DrawerContent, DrawerTrigger } from "@/shared/ui/drawer"
-import { type MapMarker, MapPanel } from "@/shared/ui/map-panel"
+import { MapPanel, type MapPoint } from "@/shared/ui/map-panel"
 import { Page } from "@/shared/ui/page"
 import { chatService } from "../api/chat-service"
 import type { AssistantMessage, Chat } from "../chat"
@@ -23,9 +23,9 @@ export function ConversationPage({ chatId }: { chatId: string }) {
     useCallback(() => document.getElementById("main"), []),
     chat?.messages,
   )
-  const markers = useTripMarkers(chat)
-
   if (!chat) return null // the route shows the 404 page for unknown chats
+
+  const points = tripPoints(chat)
 
   const openQuestion = chat.messages.findLast(
     (message): message is AssistantMessage =>
@@ -48,15 +48,14 @@ export function ConversationPage({ chatId }: { chatId: string }) {
             </Button>
           </DrawerTrigger>
           <DrawerContent title="Map of your trip" className="p-0">
-            <MapPanel label="Map of your trip" markers={markers} className="h-[70dvh]" />
+            <MapPanel points={points} className="h-[70dvh]" />
           </DrawerContent>
         </Drawer>
       }
       asideOnly={mapExpanded}
       aside={
         <MapPanel
-          label="Map of your trip"
-          markers={markers}
+          points={points}
           expanded={mapExpanded}
           onExpandedChange={setMapExpanded}
           className={cn(
@@ -87,20 +86,15 @@ export function ConversationPage({ chatId }: { chatId: string }) {
   )
 }
 
-/** The places in the chat's searches, as map pins. Stable while a reply streams, so the map doesn't redraw. */
-function useTripMarkers(chat: Chat | undefined) {
-  const places = (chat?.messages ?? []).flatMap((message) =>
-    message.role === "user" && message.search
-      ? message.search.mode === "stays"
-        ? [message.search.destination]
-        : [message.search.origin, message.search.destination]
-      : [],
-  )
-  const key = places.map((place) => place.id).join(",")
-  // biome-ignore lint/correctness/useExhaustiveDependencies: recompute only when the places change
-  return useMemo<MapMarker[]>(
-    () =>
-      places.map((place) => ({ id: place.id, label: place.name, lng: place.lng, lat: place.lat })),
-    [key],
-  )
+/** The places in the chat's searches, as map points. (MapPanel only redraws when they change.) */
+function tripPoints(chat: Chat): MapPoint[] {
+  return chat.messages
+    .flatMap((message) =>
+      message.role === "user" && message.search
+        ? message.search.mode === "stays"
+          ? [message.search.destination]
+          : [message.search.origin, message.search.destination]
+        : [],
+    )
+    .map((place) => ({ label: place.name, lng: place.lng, lat: place.lat }))
 }

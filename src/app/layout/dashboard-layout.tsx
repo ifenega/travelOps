@@ -27,11 +27,12 @@ export function DashboardLayout() {
       >
         Skip to content
       </a>
-      <div className="flex h-dvh bg-muted">
+      {/* Printing: no fixed height or inner scrolling, so long pages continue onto the next sheet. */}
+      <div className="flex h-dvh bg-muted print:h-auto print:bg-background">
         <Sidebar>
           <AppSidebar />
         </Sidebar>
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden bg-background pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)] lg:m-2 lg:rounded-xl lg:border lg:shadow-xs">
+        <div className="flex min-w-0 flex-1 flex-col overflow-hidden bg-background print:overflow-visible pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)] lg:m-2 lg:rounded-xl lg:border lg:shadow-xs">
           <Outlet />
         </div>
       </div>

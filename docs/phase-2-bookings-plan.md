@@ -74,7 +74,7 @@ Screen text still says what the design says.
 ### Data, without a backend
 
 - **`BookingsService` interface:**
-  - `listTrips({ owner: "mine" | "team", when: "upcoming" | "past", status?, query? })`
+  - `listTrips(when)`: upcoming or past trips, mine and the team's. The page splits them by owner and applies the status filter and search itself (`utils/filter-trips.ts`), which also gives the tab counts. If the real API pages its results, the filters move to the server.
   - `getTrip(id)`
   - `deleteTrip(id)` and `deleteBooking(tripId, bookingId)`
   - `getShareLink(tripId)`, `setShareLinkEnabled(tripId, on)`
@@ -114,7 +114,7 @@ Screen text still says what the design says.
 ### Map (trip page)
 
 - **Same choice as chat:** MapLibre GL + OpenFreeMap, lazy-loaded.
-- **Two features need it,** so `MapPanel` (the expand and zoom controls) goes in `src/shared/ui/`. If the chat session has already built it, bookings uses that one. Otherwise bookings builds it there and tells the chat session (section 7).
+- **Two features need it,** so `MapPanel` (the expand and zoom controls) goes in `src/shared/ui/`. Bookings built it first (`src/shared/ui/map-panel.tsx`); chat should use it. MapLibre's worker file is passed to it with `setWorkerUrl`, because Vite's dependency bundling breaks the default path.
 - **Bookings adds:** a marker for each stop and a line along the route, fitted to the trip.
 
 ---
@@ -145,11 +145,11 @@ Bookings also needs:
 
 - **Header:** `<h1>` "Bookings" and the subtitle.
 - **Controls:**
-  - Row 1: **Tabs** "My bookings 3" · "Team bookings 3".
-  - Row 2: an **Upcoming · Past** ToggleGroup on the left; **Search** and the **status Select** on the right.
+  - Row 1: **Tabs** "My bookings 3" · "Team bookings 3" on the left; **Search** and the **status Select** on the right, as in the design.
+  - Row 2: an **Upcoming · Past** ToggleGroup.
   - On phones, row 2 wraps.
 - **Status filter:** "All status", Draft, Pending, Booked. It shows only on **Upcoming**, as in the design, because past trips are all Paid.
-- **Search:** an input with a search icon. It filters by trip title and place as you type. The mock filters in memory; the real API gets `q`.
+- **Search:** an input with a search icon. It filters by trip title and place as you type; the URL updates once typing pauses.
 - **Grid:** 1 column on phones, 2 from `sm`, 3 from `lg`, 4 from `xl`.
 - **Trip card:**
   - The **title is a link to the trip page**, stretched to cover the card, so the whole card is clickable.
@@ -172,7 +172,7 @@ Bookings also needs:
 - **Send via email:**
   - Turning it on shows the **recipient picker**: a combobox of team members (avatar, name, email). Picked people show as removable chips. A **Send** button is disabled until someone is picked.
   - Send shows the toast "Trip shared with 2 people", then clears the picker.
-- **Recipient picker:** built inside the bookings feature with Downshift's `useCombobox` + `useMultipleSelection`, like the shared Combobox. It moves to `shared/` when a second feature needs it (Invite members probably will).
+- **Recipient picker:** built inside the bookings feature with Downshift's `useCombobox` + `useMultipleSelection`, like the shared Combobox. Its list sits in the dialog's flow rather than floating, so the dialog's scroll area can't clip it. It moves to `shared/` when a second feature needs it (Invite members probably will).
 
 ### Trip page
 
@@ -269,13 +269,13 @@ Each milestone ends with: stories for any new components; a11y checks passing; `
 | #         | Milestone                                                                                                                                                       | Done when                                                                                                 |
 | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | **M0** ✅ | **Baseline:** `main` fast-forwarded; `bookings-ui` worktree created                                                                                             | `git worktree list` shows `travelOps-bookings`                                                            |
-| **M1**    | **Dependencies + shared components** (section 3): TanStack Query, Bebas Neue, DropdownMenu, Dialog, AlertDialog, Switch, Tabs, Avatar. Merged to `main`.        | Each has stories, with keyboard tests for DropdownMenu and Dialog (Esc closes, focus returns)             |
-| **M2**    | **Data:** types and Zod schemas, mock service, mock data copied from the screenshots, query hooks, `itinerary.ts` / `calendar.ts` / `format.ts` with unit tests | Unit tests pass; hooks return the mock trips                                                              |
-| **M3**    | **Bookings list:** header, tabs with counts, Upcoming / Past, search, status filter, card grid, URL params, loading / empty / no-match / error states           | Matches screens 1, 2, 4 and 5; filters survive a refresh and the back button                              |
-| **M4**    | **Card actions:** `···` menu, Edit → chat, confirm delete with toast and focus handling                                                                         | Matches screen 3; delete works by keyboard alone                                                          |
-| **M5**    | **Share trip dialog:** switches, trip picker, link + Copy, recipient picker, Send                                                                               | Matches screens 6–8; fully usable with VoiceOver                                                          |
-| **M6**    | **Trip page:** header and menu, tabs, timeline with stops and layovers, booking cards and their menu, print stylesheet, Add to calendar                         | Matches screens 9–13 (without the map); the printout is readable; the `.ics` file opens in Apple Calendar |
-| **M7**    | **Map:** split layout, `MapPanel`, stop markers and route line, lazy-loaded; the mobile Map sheet                                                               | Matches screen 9; the list route doesn't load the map library                                             |
+| **M1** ✅ | **Dependencies + shared components** (section 3): TanStack Query, Bebas Neue, DropdownMenu, Dialog, AlertDialog, Switch, Tabs, Avatar. Merged to `main`.        | Each has stories, with keyboard tests for DropdownMenu and Dialog (Esc closes, focus returns)             |
+| **M2** ✅ | **Data:** types and Zod schemas, mock service, mock data copied from the screenshots, query hooks, `itinerary.ts` / `calendar.ts` / `format.ts` with unit tests | Unit tests pass; hooks return the mock trips                                                              |
+| **M3** ✅ | **Bookings list:** header, tabs with counts, Upcoming / Past, search, status filter, card grid, URL params, loading / empty / no-match / error states           | Matches screens 1, 2, 4 and 5; filters survive a refresh and the back button                              |
+| **M4** ✅ | **Card actions:** `···` menu, Edit → chat, confirm delete with toast and focus handling                                                                         | Matches screen 3; delete works by keyboard alone                                                          |
+| **M5** ✅ | **Share trip dialog:** switches, trip picker, link + Copy, recipient picker, Send                                                                               | Matches screens 6–8; fully usable with VoiceOver                                                          |
+| **M6** ✅ | **Trip page:** header and menu, tabs, timeline with stops and layovers, booking cards and their menu, print stylesheet, Add to calendar                         | Matches screens 9–13 (without the map); the printout is readable; the `.ics` file opens in Apple Calendar |
+| **M7** ✅ | **Map:** split layout, `MapPanel`, stop markers and route line, lazy-loaded; the mobile Map sheet                                                               | Matches screen 9; the list route doesn't load the map library                                             |
 | **M8**    | **Mobile and polish:** the section 6 layouts on a real iPhone, the `review-animations` pass, one Playwright test (list → trip → share) on the mock              | The e2e test passes; checked on an iPhone                                                                 |
 
 M1 comes first. After it, M2 and the M3 layout can run side by side. M4 and M5 need M3; M7 needs M6.
