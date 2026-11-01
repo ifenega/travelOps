@@ -1,0 +1,239 @@
+/*
+ * TravelOps design tokens: the single source for colour, type, shadow and motion.
+ *
+ * Two layers:
+ *   1. Palette (e.g. primary-600, gray-200): raw values, never change between themes.
+ *   2. Semantic (background, foreground, primary, border…): what components use.
+ *      Only this layer changes for dark mode.
+ *
+ * Spacing and radius use Tailwind's defaults (4px grid; radius sm 4px, md 6px, lg 8px), same as vivida.
+ */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 1. Palette ---------------------------------------------------------------- */
+
+@theme static {
+  /* Only our palette exists, so stray Tailwind colours (bg-red-500) can't sneak in. */
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Brand blue. 600 is the base; 25, 50 and 300 are sampled from the Figma buttons. */
+  --color-primary-25: #f7f9fd;
+  --color-primary-50: #f0f5fc;
+  --color-primary-100: #d6e3f7;
+  --color-primary-200: #b7cef0;
+  --color-primary-300: #8bb1e7;
+  --color-primary-400: #5b90dd;
+  --color-primary-500: #4682d9;
+  --color-primary-600: #3274d5;
+  --color-primary-700: #295faf;
+  --color-primary-800: #204b8a;
+  --color-primary-900: #163460;
+
+  /* Neutral gray, sampled from the Figma banners, buttons and tooltip. */
+  --color-gray-25: #fcfcfc;
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e8e8e8;
+  --color-gray-300: #cdcdcd;
+  --color-gray-400: #ababab;
+  --color-gray-500: #8e8e8e;
+  --color-gray-600: #6b6b6b;
+  --color-gray-700: #595959;
+  --color-gray-800: #363636;
+  --color-gray-900: #1f1f1f;
+  --color-gray-950: #141414;
+
+  /* Status colours. Same values as vivida and Untitled UI; the Figma matches them. */
+  --color-error-25: #fffbfa;
+  --color-error-50: #fef3f2;
+  --color-error-100: #fee4e2;
+  --color-error-200: #fecdca;
+  --color-error-300: #fda29b;
+  --color-error-400: #f97066;
+  --color-error-500: #f04438;
+  --color-error-600: #d92d20;
+  --color-error-700: #b42318;
+  --color-error-800: #912018;
+  --color-error-900: #7a271a;
+
+  --color-warning-25: #fffcf5;
+  --color-warning-50: #fffaeb;
+  --color-warning-100: #fef0c7;
+  --color-warning-200: #fedf89;
+  --color-warning-300: #fec84b;
+  --color-warning-400: #fdb022;
+  --color-warning-500: #f79009;
+  --color-warning-600: #dc6803;
+  --color-warning-700: #b54708;
+  --color-warning-800: #93370d;
+  --color-warning-900: #7a2e0e;
+
+  --color-success-25: #f6fef9;
+  --color-success-50: #ecfdf3;
+  --color-success-100: #d1fadf;
+  --color-success-200: #a6f4c5;
+  --color-success-300: #6ce9a6;
+  --color-success-400: #32d583;
+  --color-success-500: #12b76a;
+  --color-success-600: #039855;
+  --color-success-700: #027a48;
+  --color-success-800: #05603a;
+  --color-success-900: #054f31;
+
+  /* Info: only the two values the Figma's blue badge uses. */
+  --color-info-100: #cef5f6;
+  --color-info-700: #0055bc;
+
+  /* Type */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Shadows: the xs–3xl scale named in the Figma (Untitled UI values). */
+  --shadow-*: initial;
+  --shadow-xs: 0 1px 2px rgb(16 24 40 / 0.05);
+  --shadow-sm: 0 1px 3px rgb(16 24 40 / 0.1), 0 1px 2px rgb(16 24 40 / 0.06);
+  --shadow-md: 0 4px 8px -2px rgb(16 24 40 / 0.1), 0 2px 4px -2px rgb(16 24 40 / 0.06);
+  --shadow-lg: 0 12px 16px -4px rgb(16 24 40 / 0.08), 0 4px 6px -2px rgb(16 24 40 / 0.03);
+  --shadow-xl: 0 20px 24px -4px rgb(16 24 40 / 0.08), 0 8px 8px -4px rgb(16 24 40 / 0.03);
+  --shadow-2xl: 0 24px 48px -12px rgb(16 24 40 / 0.18);
+  --shadow-3xl: 0 32px 64px -12px rgb(16 24 40 / 0.14);
+
+  /*
+   * Motion (Emil Kowalski's curves). ease-in is removed on purpose: it feels sluggish on UI.
+   * Durations use Tailwind's duration-* utilities:
+   *   press 150 · tooltip 125 · dropdown/popover 200 · dialog 250 · drawer 500 · stay under 300 otherwise
+   */
+  --ease-in: initial;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1); /* enter and exit: the default */
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1); /* moving something already on screen */
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1); /* iOS-like sheets */
+
+  /* Tooltips and small popovers: fade + grow from 0.97. Reduced motion drops the scale (globals.css). */
+  --animate-pop-in: pop-in 125ms var(--ease-out);
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+
+  /* Collapsible sections (sidebar groups): height + fade, Radix measures the height for us. */
+  --animate-collapsible-open: collapsible-open 200ms var(--ease-out);
+  --animate-collapsible-close: collapsible-close 200ms var(--ease-out);
+
+  @keyframes collapsible-open {
+    from {
+      height: 0;
+      opacity: 0;
+    }
+    to {
+      height: var(--radix-collapsible-content-height);
+    }
+  }
+  @keyframes collapsible-close {
+    from {
+      height: var(--radix-collapsible-content-height);
+    }
+    to {
+      height: 0;
+      opacity: 0;
+    }
+  }
+
+  /* Mobile sidebar: slides in from the left with the iOS curve, leaves a little faster. */
+  --animate-sheet-in: sheet-in 300ms var(--ease-drawer);
+  --animate-sheet-out: sheet-out 200ms var(--ease-out);
+  --animate-fade-in: fade-in 300ms var(--ease-out);
+  --animate-fade-out: fade-out 200ms var(--ease-out);
+
+  @keyframes sheet-in {
+    from {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes sheet-out {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+}
+
+/* 2. Semantic --------------------------------------------------------------- */
+/* In Tailwind classes use bg-primary, text-foreground…; in plain CSS use var(--primary), var(--foreground)… */
+
+:root {
+  --background: var(--color-white);
+  --foreground: var(--color-gray-800);
+  --muted: var(--color-gray-50);
+  --muted-foreground: var(--color-gray-700);
+  --card: var(--color-white);
+  --card-foreground: var(--color-gray-800);
+  --popover: var(--color-white);
+  --popover-foreground: var(--color-gray-800);
+  --primary: var(--color-primary-600);
+  --primary-foreground: var(--color-white);
+  --secondary: var(--color-gray-100);
+  --secondary-foreground: var(--color-gray-800);
+  --accent: var(--color-gray-50);
+  --accent-foreground: var(--color-gray-800);
+  --destructive: var(--color-error-600);
+  --border: var(--color-gray-200);
+  --input: var(--color-gray-200);
+  --ring: var(--color-primary-600);
+}
+
+/* Dark mode is behind the darkMode flag and team-only for now. */
+.dark {
+  --background: var(--color-gray-950);
+  --foreground: var(--color-gray-100);
+  --muted: var(--color-gray-900);
+  --muted-foreground: var(--color-gray-400);
+  --card: var(--color-gray-900);
+  --card-foreground: var(--color-gray-100);
+  --popover: var(--color-gray-900);
+  --popover-foreground: var(--color-gray-100);
+  --primary: var(--color-primary-600);
+  --primary-foreground: var(--color-white);
+  --secondary: var(--color-gray-900);
+  --secondary-foreground: var(--color-gray-100);
+  --accent: var(--color-gray-900);
+  --accent-foreground: var(--color-gray-100);
+  --destructive: var(--color-error-600);
+  --border: var(--color-gray-800);
+  --input: var(--color-gray-800);
+  --ring: var(--color-primary-400);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}

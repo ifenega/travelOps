@@ -1,0 +1,108 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "./tokens.css";
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+
+  /* Headings and <main> get focus after navigation (for screen readers); no ring needed there. */
+  [tabindex="-1"]:focus {
+    outline: none;
+  }
+
+  /* Tighter tracking on headings, normal on body text. */
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.02em;
+  }
+}
+
+/*
+ * Mobile baseline. The reasons behind each rule are in .claude/skills/mobile-native.
+ */
+@layer base {
+  html {
+    /* No grey flash on tap. Every control gets its own :active state instead. */
+    -webkit-tap-highlight-color: transparent;
+    /* No font inflation in landscape on iOS. */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html,
+  body {
+    /* App-like: no pull-to-refresh or page bounce. Inner scroll areas use overscroll-contain. */
+    overscroll-behavior: none;
+  }
+
+  body {
+    min-height: 100dvh;
+  }
+
+  /* iOS zooms into inputs under 16px and never zooms back out. */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  /* Taps fire instantly, and long-press doesn't select a button's label. */
+  button,
+  [role="button"] {
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Links stay selectable: in chat replies they're content people may copy. */
+  a {
+    touch-action: manipulation;
+  }
+}
+
+/*
+ * Reduced motion: keep the fade, drop the movement.
+ * Unlayered on purpose, so it overrides the keyframes defined in tokens.css.
+ */
+@media (prefers-reduced-motion: reduce) {
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes collapsible-open {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes collapsible-close {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes sheet-out {
+    to {
+      opacity: 0;
+    }
+  }
+}
